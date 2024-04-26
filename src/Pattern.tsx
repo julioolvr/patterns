@@ -39,11 +39,19 @@ function usePattern(width: number, height: number) {
   };
 }
 
-function PatternUi({ colorGrid, onPaint, isShifted }: PatternUiProps) {
+function PatternUi({
+  colorGrid,
+  onPaint,
+  isShifted,
+  imageOverlay,
+}: PatternUiProps) {
   return (
     <div
       className={classNames("pattern", { "pattern__is-shifted": isShifted })}
     >
+      {imageOverlay && (
+        <img className="pattern--image-overlay" src={imageOverlay} />
+      )}
       {colorGrid.map((row, y) => (
         <div key={y} className="pattern--row">
           {row.map((color, x) => (
@@ -64,6 +72,7 @@ type PatternUiProps = {
   colorGrid: Array<Array<Color>>;
   onPaint: (x: number, y: number) => void;
   isShifted: boolean;
+  imageOverlay: string | null;
 };
 
 function PaletteSelector({
@@ -94,30 +103,32 @@ type PaletteSelectorProps = {
   onSelectColorIndex: (index: number) => void;
 };
 
-function ImageSelector() {
-  const [image, setImage] = useState<string | null>(null);
-
+function ImageSelector({ onSelect }: ImageSelectorProps) {
   const onImageChange: React.ChangeEventHandler<HTMLInputElement> = useCallback(
     (event) => {
       const file = event.target.files?.[0];
 
       if (file) {
-        setImage(URL.createObjectURL(file));
+        onSelect(URL.createObjectURL(file));
       }
     },
-    []
+    [onSelect]
   );
 
   return (
     <div>
-      {image ? <img src={image} /> : undefined}
       <input type="file" accept=".jpg, .jpeg, .png" onChange={onImageChange} />
     </div>
   );
 }
 
+type ImageSelectorProps = {
+  onSelect: (imageUrl: string) => void;
+};
+
 export default function Editor() {
   const [currentColorIndex, setCurrentColorIndex] = useState(0);
+  const [imageUrl, setImageUrl] = useState<string | null>(null);
   const pattern = usePattern(10, 20);
 
   return (
@@ -128,10 +139,11 @@ export default function Editor() {
         selectedColorIndex={currentColorIndex}
         onSelectColorIndex={setCurrentColorIndex}
       />
-      <ImageSelector />
+      <ImageSelector onSelect={(imageUrl) => setImageUrl(imageUrl)} />
       <PatternUi
         colorGrid={pattern.colorGrid()}
         onPaint={(x, y) => pattern.setColor(currentColorIndex, x, y)}
+        imageOverlay={imageUrl}
         isShifted={pattern.isShifted}
       />
     </div>
