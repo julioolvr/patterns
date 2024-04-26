@@ -1,6 +1,7 @@
 import { useState } from "react";
 import * as R from "remeda";
 import { useImmer } from "use-immer";
+import classNames from "classnames";
 
 import "./Pattern.css";
 
@@ -19,9 +20,12 @@ function usePattern(width: number, height: number) {
   const [pixels, setPixels] = useImmer(
     R.times(height, () => R.times(width, R.constant(0)))
   );
+  const [isShifted, setIsShifted] = useState(false);
 
   return {
     palette,
+    isShifted,
+    toggleShift: () => setIsShifted((prev) => !prev),
     colorGrid(): Array<Array<Color>> {
       return pixels.map((row) => {
         return row.map((paletteIndex) => palette.colors[paletteIndex]);
@@ -35,9 +39,11 @@ function usePattern(width: number, height: number) {
   };
 }
 
-function PatternUi({ colorGrid, onPaint }: PatternUiProps) {
+function PatternUi({ colorGrid, onPaint, isShifted }: PatternUiProps) {
   return (
-    <div className="pattern">
+    <div
+      className={classNames("pattern", { "pattern__is-shifted": isShifted })}
+    >
       {colorGrid.map((row, y) => (
         <div key={y} className="pattern--row">
           {row.map((color, x) => (
@@ -57,6 +63,7 @@ function PatternUi({ colorGrid, onPaint }: PatternUiProps) {
 type PatternUiProps = {
   colorGrid: Array<Array<Color>>;
   onPaint: (x: number, y: number) => void;
+  isShifted: boolean;
 };
 
 function PaletteSelector({
@@ -93,6 +100,7 @@ export default function Editor() {
 
   return (
     <div>
+      <button onClick={pattern.toggleShift}>Toggle shift</button>
       <PaletteSelector
         palette={pattern.palette}
         selectedColorIndex={currentColorIndex}
@@ -101,6 +109,7 @@ export default function Editor() {
       <PatternUi
         colorGrid={pattern.colorGrid()}
         onPaint={(x, y) => pattern.setColor(currentColorIndex, x, y)}
+        isShifted={pattern.isShifted}
       />
     </div>
   );

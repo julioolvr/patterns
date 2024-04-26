@@ -1,9 +1,16 @@
 .pattern {
-  border: 1px solid black;
 }
 
 .pattern--row {
   display: flex;
+}
+
+.pattern__is-shifted .pattern--row:nth-child(odd) {
+  margin-left: -0.25em;
+}
+
+.pattern__is-shifted .pattern--row:nth-child(even) {
+  margin-left: 0.25em;
 }
 
 .pattern--cell {
@@ -11,6 +18,8 @@
   border: 1px solid black;
   width: 1em;
   height: 2em;
+  margin: 0;
+  padding: 0;
 }
 
 .palette-selector {
