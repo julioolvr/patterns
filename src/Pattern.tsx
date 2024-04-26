@@ -17,6 +17,13 @@ class Palette {
   }
 }
 
+type ColorGrid = Array<
+  Array<{
+    color: Color;
+    colorCount: number | undefined;
+  }>
+>;
+
 function coordinatesToExcel(x: number, y: number): string {
   // TODO: Do this right
   const column = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"[y % 26];
@@ -25,19 +32,23 @@ function coordinatesToExcel(x: number, y: number): string {
   return `${column}${row}`;
 }
 
-async function downloadExcel(colorGrid: Array<Array<Color>>) {
+async function downloadExcel(colorGrid: ColorGrid) {
   const workbook = new ExcelJS.Workbook();
   const sheet = workbook.addWorksheet("Pattern");
   sheet.properties.defaultRowHeight = 24;
   sheet.properties.defaultColWidth = 4;
   colorGrid.forEach((row, x) => {
-    row.forEach((color, y) => {
-      const cell = sheet.getCell(coordinatesToExcel(x, y));
-      cell.fill = {
+    row.forEach((cell, y) => {
+      const excelCell = sheet.getCell(coordinatesToExcel(x, y));
+      excelCell.fill = {
         type: "pattern",
         pattern: "solid",
-        fgColor: { argb: color.slice(1) },
+        fgColor: { argb: cell.color.slice(1) },
       };
+
+      if (cell.colorCount !== undefined) {
+        excelCell.value = cell.colorCount;
+      }
     });
   });
 
@@ -56,9 +67,33 @@ function usePattern(width: number, height: number) {
     palette,
     isShifted,
     toggleShift: () => setIsShifted((prev) => !prev),
-    colorGrid(): Array<Array<Color>> {
+    colorGrid(): ColorGrid {
       return pixels.map((row) => {
-        return row.map((paletteIndex) => palette.colors[paletteIndex]);
+        let currentColorCount = 0;
+
+        return row.map((paletteIndex, x) => {
+          currentColorCount++;
+          const isLastCellInRow = x === row.length - 1;
+          let isLastCellWithColor = isLastCellInRow;
+
+          if (!isLastCellInRow) {
+            isLastCellWithColor = paletteIndex !== row[x + 1];
+          }
+
+          const thisCellColorCount = currentColorCount;
+
+          if (isLastCellWithColor) {
+            currentColorCount = 0;
+          }
+
+          return {
+            color: palette.colors[paletteIndex],
+            colorCount:
+              isLastCellWithColor || isLastCellInRow
+                ? thisCellColorCount
+                : undefined,
+          };
+        });
       });
     },
     setColor(colorIndex: number, x: number, y: number) {
@@ -90,13 +125,15 @@ function PatternUi({
       <div>
         {colorGrid.map((row, y) => (
           <div key={y} className="pattern--row">
-            {row.map((color, x) => (
+            {row.map((cell, x) => (
               <button
                 key={x}
                 className="pattern--cell"
-                style={{ backgroundColor: color }}
+                style={{ backgroundColor: cell.color }}
                 onClick={() => onPaint(x, y)}
-              ></button>
+              >
+                {cell.colorCount}
+              </button>
             ))}
           </div>
         ))}
@@ -106,7 +143,7 @@ function PatternUi({
 }
 
 type PatternUiProps = {
-  colorGrid: Array<Array<Color>>;
+  colorGrid: ColorGrid;
   onPaint: (x: number, y: number) => void;
   isShifted: boolean;
   imageOverlay: string | null;
