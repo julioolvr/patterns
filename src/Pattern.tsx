@@ -4,20 +4,12 @@ import { useImmer } from "use-immer";
 import classNames from "classnames";
 import ExcelJS from "exceljs";
 import { saveAs } from "file-saver";
-import tinycolor from "tinycolor2";
-import { ColorSwatch, Group, CheckIcon, rem } from "@mantine/core";
+
+import foregroundColorForBackground from "./utils/foregroundColorForBackground";
+import Palette, { Color } from "./modules/palette";
+import PaletteSelector from "./components/PaletteSelector";
 
 import "./Pattern.css";
-
-type Color = tinycolor.Instance;
-
-class Palette {
-  colors: Array<Color>;
-
-  constructor() {
-    this.colors = [tinycolor("red"), tinycolor("black")];
-  }
-}
 
 type ColorGrid = Array<
   Array<{
@@ -156,47 +148,6 @@ type PatternUiProps = {
   isShifted: boolean;
   imageOverlay: string | null;
   imageOverlayOpacity: number;
-};
-
-function foregroundColorForBackground(
-  color: tinycolor.Instance
-): tinycolor.Instance {
-  return color.isDark() ? tinycolor("white") : tinycolor("black");
-}
-
-function PaletteSelector({
-  palette,
-  selectedColorIndex,
-  onSelectColorIndex,
-}: PaletteSelectorProps) {
-  return (
-    <Group>
-      {palette.colors.map((color, index) => (
-        <ColorSwatch
-          key={index}
-          component="button"
-          color={color.toHexString()}
-          onClick={() => onSelectColorIndex(index)}
-        >
-          {selectedColorIndex === index && (
-            <CheckIcon
-              style={{
-                width: "30%",
-                height: "30%",
-                color: foregroundColorForBackground(color).toHexString(),
-              }}
-            />
-          )}
-        </ColorSwatch>
-      ))}
-    </Group>
-  );
-}
-
-type PaletteSelectorProps = {
-  palette: Palette;
-  selectedColorIndex: number;
-  onSelectColorIndex: (index: number) => void;
 };
 
 function ImageSelector({ onSelect }: ImageSelectorProps) {

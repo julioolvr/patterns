@@ -38,7 +38,3 @@
   height: 100%;
   pointer-events: none;
 }
-
-.palette-selector {
-  display: flex;
-}
