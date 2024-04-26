@@ -10,6 +10,7 @@ import usePalette, { Color } from "./modules/palette";
 import PaletteSelector from "./components/PaletteSelector";
 
 import "./Pattern.css";
+import { AppShell, Stack } from "@mantine/core";
 
 type ColorGrid = Array<
   Array<{
@@ -207,29 +208,39 @@ export default function Editor() {
   const pattern = usePattern(10, 20);
 
   return (
-    <div>
-      <button onClick={pattern.toggleShift}>Toggle shift</button>
-      <PaletteSelector
-        palette={pattern.palette}
-        selectedColorIndex={currentColorIndex}
-        onSelectColorIndex={setCurrentColorIndex}
-        onAddColor={(newColor) => pattern.addColor(newColor)}
-        onUpdateColor={(index, newColor) =>
-          pattern.updateColor(index, newColor)
-        }
-      />
-      <ImageSelector onSelect={(imageUrl) => setImageUrl(imageUrl)} />
-      <OpacitySelector opacity={imageOpacity} setOpacity={setImageOpacity} />
-      <button onClick={() => downloadExcel(pattern.colorGrid())}>
-        Download
-      </button>
-      <PatternUi
-        colorGrid={pattern.colorGrid()}
-        onPaint={(x, y) => pattern.setColor(currentColorIndex, x, y)}
-        isShifted={pattern.isShifted}
-        imageOverlay={imageUrl}
-        imageOverlayOpacity={imageOpacity}
-      />
-    </div>
+    <AppShell navbar={{ width: 300, breakpoint: "sm" }} padding="md">
+      <AppShell.Navbar p="md">
+        <Stack>
+          <button onClick={pattern.toggleShift}>Toggle shift</button>
+          <ImageSelector onSelect={(imageUrl) => setImageUrl(imageUrl)} />
+          <OpacitySelector
+            opacity={imageOpacity}
+            setOpacity={setImageOpacity}
+          />
+          <button onClick={() => downloadExcel(pattern.colorGrid())}>
+            Download Excel
+          </button>
+        </Stack>
+      </AppShell.Navbar>
+      <AppShell.Main>
+        <PaletteSelector
+          palette={pattern.palette}
+          selectedColorIndex={currentColorIndex}
+          onSelectColorIndex={setCurrentColorIndex}
+          onAddColor={(newColor) => pattern.addColor(newColor)}
+          onUpdateColor={(index, newColor) =>
+            pattern.updateColor(index, newColor)
+          }
+        />
+
+        <PatternUi
+          colorGrid={pattern.colorGrid()}
+          onPaint={(x, y) => pattern.setColor(currentColorIndex, x, y)}
+          isShifted={pattern.isShifted}
+          imageOverlay={imageUrl}
+          imageOverlayOpacity={imageOpacity}
+        />
+      </AppShell.Main>
+    </AppShell>
   );
 }
