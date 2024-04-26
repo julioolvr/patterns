@@ -4,16 +4,17 @@ import { useImmer } from "use-immer";
 import classNames from "classnames";
 import ExcelJS from "exceljs";
 import { saveAs } from "file-saver";
+import tinycolor from "tinycolor2";
 
 import "./Pattern.css";
 
-type Color = string;
+type Color = tinycolor.Instance;
 
 class Palette {
   colors: Array<Color>;
 
   constructor() {
-    this.colors = ["#ff0000", "#000000"];
+    this.colors = [tinycolor("red"), tinycolor("black")];
   }
 }
 
@@ -40,10 +41,13 @@ async function downloadExcel(colorGrid: ColorGrid) {
   colorGrid.forEach((row, x) => {
     row.forEach((cell, y) => {
       const excelCell = sheet.getCell(coordinatesToExcel(x, y));
+      excelCell.font = {
+        color: { argb: cell.color.isDark() ? "ffffff" : "000000" },
+      };
       excelCell.fill = {
         type: "pattern",
         pattern: "solid",
-        fgColor: { argb: cell.color.slice(1) },
+        fgColor: { argb: cell.color.toHex() },
       };
 
       if (cell.colorCount !== undefined) {
@@ -129,7 +133,10 @@ function PatternUi({
               <button
                 key={x}
                 className="pattern--cell"
-                style={{ backgroundColor: cell.color }}
+                style={{
+                  backgroundColor: cell.color.toHexString(),
+                  color: cell.color.isDark() ? "#fff" : "#000",
+                }}
                 onClick={() => onPaint(x, y)}
               >
                 {cell.colorCount}
@@ -165,7 +172,7 @@ function PaletteSelector({
             selectedColorIndex === index ? { border: "3px solid black" } : {}
           }
         >
-          {color}
+          {color.getOriginalInput().toString()}
         </button>
       ))}
     </div>
