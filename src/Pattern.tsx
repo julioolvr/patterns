@@ -1,4 +1,5 @@
-import { useCallback, useState } from "react";
+import { useState } from "react";
+import { AppShell, FileInput, Stack, Slider } from "@mantine/core";
 import * as R from "remeda";
 import { useImmer } from "use-immer";
 import classNames from "classnames";
@@ -10,7 +11,6 @@ import usePalette, { Color } from "./modules/palette";
 import PaletteSelector from "./components/PaletteSelector";
 
 import "./Pattern.css";
-import { AppShell, Stack } from "@mantine/core";
 
 type ColorGrid = Array<
   Array<{
@@ -158,20 +158,13 @@ type PatternUiProps = {
 };
 
 function ImageSelector({ onSelect }: ImageSelectorProps) {
-  const onImageChange: React.ChangeEventHandler<HTMLInputElement> = useCallback(
-    (event) => {
-      const file = event.target.files?.[0];
-
-      if (file) {
-        onSelect(URL.createObjectURL(file));
-      }
-    },
-    [onSelect]
-  );
-
   return (
     <div>
-      <input type="file" accept=".jpg, .jpeg, .png" onChange={onImageChange} />
+      <FileInput
+        accept=".jpg, .jpeg, .png"
+        onChange={(file) => file && onSelect(URL.createObjectURL(file))}
+        placeholder="Select an image"
+      />
     </div>
   );
 }
@@ -184,13 +177,12 @@ function OpacitySelector({ opacity, setOpacity }: OpacitySelectorProps) {
   return (
     <div>
       Opacity:{" "}
-      <input
-        type="range"
+      <Slider
         min={0}
         max={1}
         step={0.05}
         value={opacity}
-        onChange={(e) => setOpacity(Number(e.target.value))}
+        onChange={(newOpacity) => setOpacity(newOpacity)}
       />
     </div>
   );
