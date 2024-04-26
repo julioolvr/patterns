@@ -12,3 +12,7 @@
   width: 1em;
   height: 2em;
 }
+
+.palette-selector {
+  display: flex;
+}
