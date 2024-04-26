@@ -5,7 +5,7 @@ import classNames from "classnames";
 import ExcelJS from "exceljs";
 import { saveAs } from "file-saver";
 import tinycolor from "tinycolor2";
-import { ColorSwatch, Group } from "@mantine/core";
+import { ColorSwatch, Group, CheckIcon, rem } from "@mantine/core";
 
 import "./Pattern.css";
 
@@ -43,7 +43,7 @@ async function downloadExcel(colorGrid: ColorGrid) {
     row.forEach((cell, y) => {
       const excelCell = sheet.getCell(coordinatesToExcel(x, y));
       excelCell.font = {
-        color: { argb: cell.color.isDark() ? "ffffff" : "000000" },
+        color: { argb: foregroundColorForBackground(cell.color).toHex() },
       };
       excelCell.fill = {
         type: "pattern",
@@ -136,7 +136,7 @@ function PatternUi({
                 className="pattern--cell"
                 style={{
                   backgroundColor: cell.color.toHexString(),
-                  color: cell.color.isDark() ? "#fff" : "#000",
+                  color: foregroundColorForBackground(cell.color).toHexString(),
                 }}
                 onClick={() => onPaint(x, y)}
               >
@@ -158,6 +158,12 @@ type PatternUiProps = {
   imageOverlayOpacity: number;
 };
 
+function foregroundColorForBackground(
+  color: tinycolor.Instance
+): tinycolor.Instance {
+  return color.isDark() ? tinycolor("white") : tinycolor("black");
+}
+
 function PaletteSelector({
   palette,
   selectedColorIndex,
@@ -168,12 +174,20 @@ function PaletteSelector({
       {palette.colors.map((color, index) => (
         <ColorSwatch
           key={index}
+          component="button"
           color={color.toHexString()}
           onClick={() => onSelectColorIndex(index)}
-          style={
-            selectedColorIndex === index ? { border: "3px solid black" } : {}
-          }
-        ></ColorSwatch>
+        >
+          {selectedColorIndex === index && (
+            <CheckIcon
+              style={{
+                width: "30%",
+                height: "30%",
+                color: foregroundColorForBackground(color).toHexString(),
+              }}
+            />
+          )}
+        </ColorSwatch>
       ))}
     </Group>
   );
