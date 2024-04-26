@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import * as R from "remeda";
 import { useImmer } from "use-immer";
 import classNames from "classnames";
@@ -94,6 +94,28 @@ type PaletteSelectorProps = {
   onSelectColorIndex: (index: number) => void;
 };
 
+function ImageSelector() {
+  const [image, setImage] = useState<string | null>(null);
+
+  const onImageChange: React.ChangeEventHandler<HTMLInputElement> = useCallback(
+    (event) => {
+      const file = event.target.files?.[0];
+
+      if (file) {
+        setImage(URL.createObjectURL(file));
+      }
+    },
+    []
+  );
+
+  return (
+    <div>
+      {image ? <img src={image} /> : undefined}
+      <input type="file" accept=".jpg, .jpeg, .png" onChange={onImageChange} />
+    </div>
+  );
+}
+
 export default function Editor() {
   const [currentColorIndex, setCurrentColorIndex] = useState(0);
   const pattern = usePattern(10, 20);
@@ -106,6 +128,7 @@ export default function Editor() {
         selectedColorIndex={currentColorIndex}
         onSelectColorIndex={setCurrentColorIndex}
       />
+      <ImageSelector />
       <PatternUi
         colorGrid={pattern.colorGrid()}
         onPaint={(x, y) => pattern.setColor(currentColorIndex, x, y)}
