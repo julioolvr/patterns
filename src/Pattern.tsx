@@ -6,7 +6,7 @@ import ExcelJS from "exceljs";
 import { saveAs } from "file-saver";
 
 import foregroundColorForBackground from "./utils/foregroundColorForBackground";
-import Palette, { Color } from "./modules/palette";
+import usePalette, { Color } from "./modules/palette";
 import PaletteSelector from "./components/PaletteSelector";
 
 import "./Pattern.css";
@@ -54,7 +54,7 @@ async function downloadExcel(colorGrid: ColorGrid) {
 }
 
 function usePattern(width: number, height: number) {
-  const [palette] = useState(new Palette());
+  const palette = usePalette();
   const [pixels, setPixels] = useImmer(
     R.times(height, () => R.times(width, R.constant(0)))
   );
@@ -97,6 +97,9 @@ function usePattern(width: number, height: number) {
       setPixels((draft) => {
         draft[y][x] = colorIndex;
       });
+    },
+    addColor(color: Color) {
+      palette.addColor(color);
     },
   };
 }
@@ -207,6 +210,7 @@ export default function Editor() {
         palette={pattern.palette}
         selectedColorIndex={currentColorIndex}
         onSelectColorIndex={setCurrentColorIndex}
+        onAddColor={(newColor) => pattern.addColor(newColor)}
       />
       <ImageSelector onSelect={(imageUrl) => setImageUrl(imageUrl)} />
       <OpacitySelector opacity={imageOpacity} setOpacity={setImageOpacity} />
