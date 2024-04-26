@@ -10,7 +10,11 @@ export type Palette = {
 };
 
 export default function usePalette(): Palette {
-  const [colors, setColors] = useImmer([tinycolor("red"), tinycolor("black")]);
+  const [colors, setColors] = useImmer([
+    tinycolor("white"),
+    tinycolor("red"),
+    tinycolor("black"),
+  ]);
 
   return {
     colors,
