@@ -50,25 +50,27 @@ function PatternUi({
     <div
       className={classNames("pattern", { "pattern__is-shifted": isShifted })}
     >
-      {imageOverlay && (
+      {isShifted && imageOverlay && (
         <img
           className="pattern--image-overlay"
           src={imageOverlay}
           style={{ opacity: imageOverlayOpacity }}
         />
       )}
-      {colorGrid.map((row, y) => (
-        <div key={y} className="pattern--row">
-          {row.map((color, x) => (
-            <button
-              key={x}
-              className="pattern--cell"
-              style={{ backgroundColor: color }}
-              onClick={() => onPaint(x, y)}
-            ></button>
-          ))}
-        </div>
-      ))}
+      <div>
+        {colorGrid.map((row, y) => (
+          <div key={y} className="pattern--row">
+            {row.map((color, x) => (
+              <button
+                key={x}
+                className="pattern--cell"
+                style={{ backgroundColor: color }}
+                onClick={() => onPaint(x, y)}
+              ></button>
+            ))}
+          </div>
+        ))}
+      </div>
     </div>
   );
 }

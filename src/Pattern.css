@@ -3,6 +3,10 @@
   position: relative;
 }
 
+.pattern.pattern__is-shifted {
+  padding-left: 0.5em;
+}
+
 .pattern--row {
   display: flex;
 }
