@@ -6,6 +6,7 @@ export type Color = tinycolor.Instance;
 export type Palette = {
   colors: Array<Color>;
   addColor: (newColor: Color) => void;
+  updateColor: (index: number, newColor: Color) => void;
 };
 
 export default function usePalette(): Palette {
@@ -16,6 +17,11 @@ export default function usePalette(): Palette {
     addColor(newColor: Color) {
       setColors((draft) => {
         draft.push(newColor);
+      });
+    },
+    updateColor(index: number, color: Color) {
+      setColors((draft) => {
+        draft[index] = color;
       });
     },
   };

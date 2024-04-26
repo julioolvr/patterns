@@ -101,6 +101,9 @@ function usePattern(width: number, height: number) {
     addColor(color: Color) {
       palette.addColor(color);
     },
+    updateColor(index: number, color: Color) {
+      palette.updateColor(index, color);
+    },
   };
 }
 
@@ -211,6 +214,9 @@ export default function Editor() {
         selectedColorIndex={currentColorIndex}
         onSelectColorIndex={setCurrentColorIndex}
         onAddColor={(newColor) => pattern.addColor(newColor)}
+        onUpdateColor={(index, newColor) =>
+          pattern.updateColor(index, newColor)
+        }
       />
       <ImageSelector onSelect={(imageUrl) => setImageUrl(imageUrl)} />
       <OpacitySelector opacity={imageOpacity} setOpacity={setImageOpacity} />
