@@ -2,6 +2,8 @@ import { useCallback, useState } from "react";
 import * as R from "remeda";
 import { useImmer } from "use-immer";
 import classNames from "classnames";
+import ExcelJS from "exceljs";
+import { saveAs } from "file-saver";
 
 import "./Pattern.css";
 
@@ -11,8 +13,34 @@ class Palette {
   colors: Array<Color>;
 
   constructor() {
-    this.colors = ["red", "black"];
+    this.colors = ["#ff0000", "#000000"];
   }
+}
+
+function coordinatesToExcel(x: number, y: number): string {
+  // TODO: Do this right
+  const column = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"[y % 26];
+  const row = x + 1;
+
+  return `${column}${row}`;
+}
+
+async function downloadExcel(colorGrid: Array<Array<Color>>) {
+  const workbook = new ExcelJS.Workbook();
+  const sheet = workbook.addWorksheet("Pattern");
+  colorGrid.forEach((row, x) => {
+    row.forEach((color, y) => {
+      const cell = sheet.getCell(coordinatesToExcel(x, y));
+      cell.fill = {
+        type: "pattern",
+        pattern: "solid",
+        fgColor: { argb: color.slice(1) },
+      };
+    });
+  });
+
+  const buffer = await workbook.xlsx.writeBuffer();
+  saveAs(new Blob([buffer]), "result.xlsx");
 }
 
 function usePattern(width: number, height: number) {
@@ -171,6 +199,9 @@ export default function Editor() {
       />
       <ImageSelector onSelect={(imageUrl) => setImageUrl(imageUrl)} />
       <OpacitySelector opacity={imageOpacity} setOpacity={setImageOpacity} />
+      <button onClick={() => downloadExcel(pattern.colorGrid())}>
+        Download
+      </button>
       <PatternUi
         colorGrid={pattern.colorGrid()}
         onPaint={(x, y) => pattern.setColor(currentColorIndex, x, y)}
