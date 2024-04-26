@@ -5,6 +5,7 @@ import classNames from "classnames";
 import ExcelJS from "exceljs";
 import { saveAs } from "file-saver";
 import tinycolor from "tinycolor2";
+import { ColorSwatch, Group } from "@mantine/core";
 
 import "./Pattern.css";
 
@@ -163,19 +164,18 @@ function PaletteSelector({
   onSelectColorIndex,
 }: PaletteSelectorProps) {
   return (
-    <div className="palette-selector">
+    <Group>
       {palette.colors.map((color, index) => (
-        <button
+        <ColorSwatch
           key={index}
+          color={color.toHexString()}
           onClick={() => onSelectColorIndex(index)}
           style={
             selectedColorIndex === index ? { border: "3px solid black" } : {}
           }
-        >
-          {color.getOriginalInput().toString()}
-        </button>
+        ></ColorSwatch>
       ))}
-    </div>
+    </Group>
   );
 }
 
