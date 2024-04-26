@@ -44,13 +44,18 @@ function PatternUi({
   onPaint,
   isShifted,
   imageOverlay,
+  imageOverlayOpacity,
 }: PatternUiProps) {
   return (
     <div
       className={classNames("pattern", { "pattern__is-shifted": isShifted })}
     >
       {imageOverlay && (
-        <img className="pattern--image-overlay" src={imageOverlay} />
+        <img
+          className="pattern--image-overlay"
+          src={imageOverlay}
+          style={{ opacity: imageOverlayOpacity }}
+        />
       )}
       {colorGrid.map((row, y) => (
         <div key={y} className="pattern--row">
@@ -73,6 +78,7 @@ type PatternUiProps = {
   onPaint: (x: number, y: number) => void;
   isShifted: boolean;
   imageOverlay: string | null;
+  imageOverlayOpacity: number;
 };
 
 function PaletteSelector({
@@ -126,9 +132,31 @@ type ImageSelectorProps = {
   onSelect: (imageUrl: string) => void;
 };
 
+function OpacitySelector({ opacity, setOpacity }: OpacitySelectorProps) {
+  return (
+    <div>
+      Opacity:{" "}
+      <input
+        type="range"
+        min={0}
+        max={1}
+        step={0.05}
+        value={opacity}
+        onChange={(e) => setOpacity(Number(e.target.value))}
+      />
+    </div>
+  );
+}
+
+type OpacitySelectorProps = {
+  opacity: number;
+  setOpacity: (newOpacity: number) => void;
+};
+
 export default function Editor() {
   const [currentColorIndex, setCurrentColorIndex] = useState(0);
   const [imageUrl, setImageUrl] = useState<string | null>(null);
+  const [imageOpacity, setImageOpacity] = useState(0.5);
   const pattern = usePattern(10, 20);
 
   return (
@@ -140,11 +168,13 @@ export default function Editor() {
         onSelectColorIndex={setCurrentColorIndex}
       />
       <ImageSelector onSelect={(imageUrl) => setImageUrl(imageUrl)} />
+      <OpacitySelector opacity={imageOpacity} setOpacity={setImageOpacity} />
       <PatternUi
         colorGrid={pattern.colorGrid()}
         onPaint={(x, y) => pattern.setColor(currentColorIndex, x, y)}
-        imageOverlay={imageUrl}
         isShifted={pattern.isShifted}
+        imageOverlay={imageUrl}
+        imageOverlayOpacity={imageOpacity}
       />
     </div>
   );
