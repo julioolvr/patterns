@@ -20,7 +20,7 @@ function usePattern(width: number, height: number) {
   const [pixels, setPixels] = useImmer(
     R.times(height, () => R.times(width, R.constant(0)))
   );
-  const [isShifted, setIsShifted] = useState(false);
+  const [isShifted, setIsShifted] = useState(true);
 
   return {
     palette,
