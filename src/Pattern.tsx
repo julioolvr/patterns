@@ -1,5 +1,6 @@
-import { useMemo } from "react";
+import { useState } from "react";
 import * as R from "remeda";
+import { useImmer } from "use-immer";
 
 import "./Pattern.css";
 
@@ -13,35 +14,40 @@ class Palette {
   }
 }
 
-class Pattern {
-  #palette: Palette;
-  pixels: Array<Array<number>>;
+function usePattern(width: number, height: number, initialPalette: Palette) {
+  const [palette] = useState(initialPalette);
+  const [pixels, setPixels] = useImmer(
+    R.times(height, () => R.times(width, R.constant(0)))
+  );
 
-  constructor(width: number, height: number, palette: Palette) {
-    this.#palette = palette;
-    this.pixels = R.times(height, () => R.times(width, R.constant(0)));
-  }
-
-  get colorGrid(): Array<Array<Color>> {
-    return this.pixels.map((row) => {
-      return row.map((paletteIndex) => this.#palette.colors[paletteIndex]);
-    });
-  }
+  return {
+    colorGrid(): Array<Array<Color>> {
+      return pixels.map((row) => {
+        return row.map((paletteIndex) => palette.colors[paletteIndex]);
+      });
+    },
+    setColor(colorIndex: number, x: number, y: number) {
+      setPixels((draft) => {
+        draft[y][x] = colorIndex;
+      });
+    },
+  };
 }
 
 export default function PatternUi() {
-  const pattern = useMemo(() => new Pattern(10, 20, new Palette()), []);
+  const pattern = usePattern(10, 20, new Palette());
 
   return (
     <div className="pattern">
-      {pattern.colorGrid.map((row, y) => (
+      {pattern.colorGrid().map((row, y) => (
         <div key={y} className="pattern--row">
           {row.map((color, x) => (
-            <div
+            <button
               key={x}
               className="pattern--cell"
               style={{ backgroundColor: color }}
-            ></div>
+              onClick={() => pattern.setColor(1, x, y)}
+            ></button>
           ))}
         </div>
       ))}
