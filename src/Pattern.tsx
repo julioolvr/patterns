@@ -28,6 +28,8 @@ function coordinatesToExcel(x: number, y: number): string {
 async function downloadExcel(colorGrid: Array<Array<Color>>) {
   const workbook = new ExcelJS.Workbook();
   const sheet = workbook.addWorksheet("Pattern");
+  sheet.properties.defaultRowHeight = 24;
+  sheet.properties.defaultColWidth = 4;
   colorGrid.forEach((row, x) => {
     row.forEach((color, y) => {
       const cell = sheet.getCell(coordinatesToExcel(x, y));
