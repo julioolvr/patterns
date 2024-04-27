@@ -1,16 +1,15 @@
 import { useState } from "react";
 import { AppShell, FileInput, Stack, Slider } from "@mantine/core";
-import * as R from "remeda";
-import { useImmer } from "use-immer";
 import classNames from "classnames";
 import ExcelJS from "exceljs";
 import { saveAs } from "file-saver";
 
 import foregroundColorForBackground from "./utils/foregroundColorForBackground";
-import usePalette, { Color } from "./modules/palette";
+import { Color } from "./modules/palette";
 import PaletteSelector from "./components/PaletteSelector";
 
 import "./Pattern.css";
+import useStore from "./store";
 
 type ColorGrid = Array<
   Array<{
@@ -54,58 +53,37 @@ async function downloadExcel(colorGrid: ColorGrid) {
   saveAs(new Blob([buffer]), "result.xlsx");
 }
 
-function usePattern(width: number, height: number) {
-  const palette = usePalette();
-  const [pixels, setPixels] = useImmer(
-    R.times(height, () => R.times(width, R.constant(0)))
-  );
-  const [isShifted, setIsShifted] = useState(true);
+function patternToColorGrid(
+  pixels: Array<Array<number>>,
+  palette: Array<Color>
+): ColorGrid {
+  return pixels.map((row) => {
+    let currentColorCount = 0;
 
-  return {
-    palette,
-    isShifted,
-    toggleShift: () => setIsShifted((prev) => !prev),
-    colorGrid(): ColorGrid {
-      return pixels.map((row) => {
-        let currentColorCount = 0;
+    return row.map((paletteIndex, x) => {
+      currentColorCount++;
+      const isLastCellInRow = x === row.length - 1;
+      let isLastCellWithColor = isLastCellInRow;
 
-        return row.map((paletteIndex, x) => {
-          currentColorCount++;
-          const isLastCellInRow = x === row.length - 1;
-          let isLastCellWithColor = isLastCellInRow;
+      if (!isLastCellInRow) {
+        isLastCellWithColor = paletteIndex !== row[x + 1];
+      }
 
-          if (!isLastCellInRow) {
-            isLastCellWithColor = paletteIndex !== row[x + 1];
-          }
+      const thisCellColorCount = currentColorCount;
 
-          const thisCellColorCount = currentColorCount;
+      if (isLastCellWithColor) {
+        currentColorCount = 0;
+      }
 
-          if (isLastCellWithColor) {
-            currentColorCount = 0;
-          }
-
-          return {
-            color: palette.colors[paletteIndex],
-            colorCount:
-              isLastCellWithColor || isLastCellInRow
-                ? thisCellColorCount
-                : undefined,
-          };
-        });
-      });
-    },
-    setColor(colorIndex: number, x: number, y: number) {
-      setPixels((draft) => {
-        draft[y][x] = colorIndex;
-      });
-    },
-    addColor(color: Color) {
-      palette.addColor(color);
-    },
-    updateColor(index: number, color: Color) {
-      palette.updateColor(index, color);
-    },
-  };
+      return {
+        color: palette[paletteIndex],
+        colorCount:
+          isLastCellWithColor || isLastCellInRow
+            ? thisCellColorCount
+            : undefined,
+      };
+    });
+  });
 }
 
 function PatternUi({
@@ -194,22 +172,32 @@ type OpacitySelectorProps = {
 };
 
 export default function Editor() {
+  const pattern = useStore((state) => state.pattern);
+  const ui = useStore((state) => state.ui);
+  const togglePatternShift = useStore((state) => state.togglePatternShift);
+  const setPixelColor = useStore((state) => state.setPixelColor);
+  const addPaletteColor = useStore((state) => state.addPaletteColor);
+  const updatePaletteColor = useStore((state) => state.updatePaletteColor);
+
   const [currentColorIndex, setCurrentColorIndex] = useState(0);
   const [imageUrl, setImageUrl] = useState<string | null>(null);
   const [imageOpacity, setImageOpacity] = useState(0.5);
-  const pattern = usePattern(10, 20);
 
   return (
     <AppShell navbar={{ width: 300, breakpoint: "sm" }} padding="md">
       <AppShell.Navbar p="md">
         <Stack>
-          <button onClick={pattern.toggleShift}>Toggle shift</button>
+          <button onClick={togglePatternShift}>Toggle shift</button>
           <ImageSelector onSelect={(imageUrl) => setImageUrl(imageUrl)} />
           <OpacitySelector
             opacity={imageOpacity}
             setOpacity={setImageOpacity}
           />
-          <button onClick={() => downloadExcel(pattern.colorGrid())}>
+          <button
+            onClick={() =>
+              downloadExcel(patternToColorGrid(pattern.pixels, pattern.palette))
+            }
+          >
             Download Excel
           </button>
         </Stack>
@@ -219,16 +207,16 @@ export default function Editor() {
           palette={pattern.palette}
           selectedColorIndex={currentColorIndex}
           onSelectColorIndex={setCurrentColorIndex}
-          onAddColor={(newColor) => pattern.addColor(newColor)}
+          onAddColor={(newColor) => addPaletteColor(newColor)}
           onUpdateColor={(index, newColor) =>
-            pattern.updateColor(index, newColor)
+            updatePaletteColor(index, newColor)
           }
         />
 
         <PatternUi
-          colorGrid={pattern.colorGrid()}
-          onPaint={(x, y) => pattern.setColor(currentColorIndex, x, y)}
-          isShifted={pattern.isShifted}
+          colorGrid={patternToColorGrid(pattern.pixels, pattern.palette)}
+          onPaint={(x, y) => setPixelColor(currentColorIndex, x, y)}
+          isShifted={ui.isPatternShifted}
           imageOverlay={imageUrl}
           imageOverlayOpacity={imageOpacity}
         />

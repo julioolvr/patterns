@@ -10,7 +10,7 @@ import { useEffect, useState } from "react";
 import tinycolor from "tinycolor2";
 
 import foregroundColorForBackground from "../utils/foregroundColorForBackground";
-import { Palette, Color } from "../modules/palette";
+import { Color } from "../modules/palette";
 
 export default function PaletteSelector({
   palette,
@@ -23,7 +23,7 @@ export default function PaletteSelector({
 
   return (
     <Group>
-      {palette.colors.map((color, index) => (
+      {palette.map((color, index) => (
         <PaletteColor
           key={index}
           color={color}
@@ -47,7 +47,7 @@ export default function PaletteSelector({
 }
 
 type PaletteSelectorProps = {
-  palette: Palette;
+  palette: Array<Color>;
   selectedColorIndex: number;
   onSelectColorIndex: (index: number) => void;
   onAddColor: (newColor: Color) => void;
