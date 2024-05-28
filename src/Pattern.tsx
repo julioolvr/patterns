@@ -11,6 +11,7 @@ import PaletteSelector from "./components/PaletteSelector";
 
 import "./Pattern.css";
 import useStore from "./store";
+import { usePalettesList } from "./queries/palettes";
 
 type ColorGrid = Array<
   Array<{
@@ -184,13 +185,9 @@ export default function Editor() {
   const [imageUrl, setImageUrl] = useState<string | null>(null);
   const [imageOpacity, setImageOpacity] = useState(0.5);
 
-  const fakeQuery = useQuery({
-    queryKey: ["fake"],
-    queryFn: async () =>
-      new Promise((resolve) => setTimeout(() => resolve("fake"), 1000)),
-  });
+  const palettesQuery = usePalettesList();
 
-  console.log(fakeQuery);
+  console.log(palettesQuery);
 
   return (
     <AppShell navbar={{ width: 300, breakpoint: "sm" }} padding="md">
