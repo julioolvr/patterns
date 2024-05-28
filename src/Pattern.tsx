@@ -3,6 +3,7 @@ import { AppShell, FileInput, Stack, Slider } from "@mantine/core";
 import classNames from "classnames";
 import ExcelJS from "exceljs";
 import { saveAs } from "file-saver";
+import { useQuery } from "@tanstack/react-query";
 
 import foregroundColorForBackground from "./utils/foregroundColorForBackground";
 import { Color } from "./modules/palette";
@@ -182,6 +183,14 @@ export default function Editor() {
   const [currentColorIndex, setCurrentColorIndex] = useState(0);
   const [imageUrl, setImageUrl] = useState<string | null>(null);
   const [imageOpacity, setImageOpacity] = useState(0.5);
+
+  const fakeQuery = useQuery({
+    queryKey: ["fake"],
+    queryFn: async () =>
+      new Promise((resolve) => setTimeout(() => resolve("fake"), 1000)),
+  });
+
+  console.log(fakeQuery);
 
   return (
     <AppShell navbar={{ width: 300, breakpoint: "sm" }} padding="md">
