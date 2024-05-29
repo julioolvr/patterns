@@ -3,7 +3,6 @@ import { AppShell, FileInput, Stack, Slider } from "@mantine/core";
 import classNames from "classnames";
 import ExcelJS from "exceljs";
 import { saveAs } from "file-saver";
-import { useQuery } from "@tanstack/react-query";
 
 import foregroundColorForBackground from "./utils/foregroundColorForBackground";
 import { Color } from "./modules/palette";
