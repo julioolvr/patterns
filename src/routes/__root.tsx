@@ -1,14 +1,16 @@
-import { createRootRoute, Link, Outlet } from "@tanstack/react-router";
+import { AppShell } from "@mantine/core";
+import { createRootRoute, Outlet } from "@tanstack/react-router";
 import { TanStackRouterDevtools } from "@tanstack/router-devtools";
 
 export const Route = createRootRoute({
   component: () => (
     <>
-      <div>
-        <Link to="/">Home</Link> <Link to="/about">About</Link>
-      </div>
-      <hr />
-      <Outlet />
+      <AppShell navbar={{ width: 300, breakpoint: "sm" }} padding="md">
+        <AppShell.Navbar p="md">Test</AppShell.Navbar>
+        <AppShell.Main>
+          <Outlet />
+        </AppShell.Main>
+      </AppShell>
       <TanStackRouterDevtools />
     </>
   ),
