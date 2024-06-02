@@ -2,11 +2,14 @@ import * as R from "remeda";
 import { makeAutoObservable, reaction } from "mobx";
 
 import { Palette } from "./palette";
-import { PatternRow } from "../queries/patterns";
+import { PatternRow, updatePattern } from "../queries/patterns";
 
-const debouncedSave = R.debounce((data) => console.log("save", data), {
-  waitMs: 1000,
-});
+const debouncedSave = R.debounce(
+  (data: PatternRow) => updatePattern(data.id, { pixels: data.pixels }),
+  {
+    waitMs: 1000,
+  }
+);
 
 export class Pattern {
   public id: string;

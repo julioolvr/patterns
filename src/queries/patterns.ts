@@ -66,3 +66,14 @@ type CreatePatternDto = {
   width: number;
   height: number;
 };
+
+export async function updatePattern(id: string, data: UpdatePatternDto) {
+  return await client
+    .from("patterns")
+    .update({ pixels: data.pixels })
+    .eq("id", id);
+}
+
+type UpdatePatternDto = {
+  pixels: Array<number>;
+};
