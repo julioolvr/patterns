@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { Link, createFileRoute } from "@tanstack/react-router";
 import { Button, Modal, NumberInput, Stack, TextInput } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { useForm } from "@mantine/form";
@@ -11,7 +11,7 @@ export const Route = createFileRoute("/")({
 });
 
 function Index() {
-  const data = Route.useLoaderData();
+  const { data } = Route.useLoaderData();
   const [
     isNewPatternModalOpen,
     { open: openNewPatternModal, close: closeNewPatternModal },
@@ -62,7 +62,13 @@ function Index() {
           </Stack>
         </form>
       </Modal>
-      <pre>{JSON.stringify(data, null, 2)}</pre>
+      <ul>
+        {data?.map((pattern) => (
+          <li key={pattern.id}>
+            <Link to={`/p/${pattern.id}`}>{pattern.name}</Link>
+          </li>
+        ))}
+      </ul>
     </Stack>
   );
 }

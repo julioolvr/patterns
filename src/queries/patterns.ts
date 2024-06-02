@@ -1,8 +1,8 @@
 import client from "../db/client";
 import { createPalette } from "./palettes";
 
-export function listPatterns() {
-  return client.from("patterns").select();
+export async function listPatterns() {
+  return await client.from("patterns").select();
 }
 
 export async function createPattern(data: CreatePatternDto) {
