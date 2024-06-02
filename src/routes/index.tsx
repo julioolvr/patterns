@@ -3,7 +3,7 @@ import { Button, Modal, NumberInput, Stack, TextInput } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { useForm } from "@mantine/form";
 
-import { listPatterns } from "../queries/patterns";
+import { createPattern, listPatterns } from "../queries/patterns";
 
 export const Route = createFileRoute("/")({
   component: Index,
@@ -34,7 +34,7 @@ function Index() {
         onClose={closeNewPatternModal}
         title="New pattern"
       >
-        <form onSubmit={form.onSubmit(console.log)}>
+        <form onSubmit={form.onSubmit((values) => createPattern(values))}>
           <Stack>
             <TextInput
               label="Name"
