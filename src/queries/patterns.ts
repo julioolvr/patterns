@@ -5,6 +5,16 @@ export async function listPatterns() {
   return await client.from("patterns").select();
 }
 
+export async function getPattern(patternId: string) {
+  const result = await client.from("patterns").select().eq("id", patternId);
+
+  if (result.error) {
+    throw result.error;
+  }
+
+  return result.data[0];
+}
+
 export async function createPattern(data: CreatePatternDto) {
   // TODO: Consider what happens if creating the pattern later fails
   const palette = await createPalette({
