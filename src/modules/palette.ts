@@ -29,4 +29,11 @@ export class Palette {
   updateColor(colorIndex: number, color: Color) {
     this.colors[colorIndex] = color;
   }
+
+  get asDatabase(): PaletteRow {
+    return {
+      id: this.id,
+      colors: this.colors.map((color) => color.toHexString()),
+    };
+  }
 }
