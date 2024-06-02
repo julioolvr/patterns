@@ -18,7 +18,6 @@ type State = {
 
 type Actions = {
   togglePatternShift: () => void;
-  setPixelColor: (colorIndex: number, x: number, y: number) => void;
   addPaletteColor: (color: Color) => void;
   updatePaletteColor: (colorIndex: number, color: Color) => void;
 };
@@ -36,10 +35,6 @@ const useStore = create<State & Actions>()(
       togglePatternShift: () =>
         set((state) => {
           state.ui.isPatternShifted = !state.ui.isPatternShifted;
-        }),
-      setPixelColor: (colorIndex, x, y) =>
-        set((state) => {
-          state.pattern.pixels[y][x] = colorIndex;
         }),
       addPaletteColor: (color) =>
         set((state) => {

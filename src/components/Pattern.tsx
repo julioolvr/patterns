@@ -3,6 +3,7 @@ import { FileInput, Stack, Slider } from "@mantine/core";
 import classNames from "classnames";
 import ExcelJS from "exceljs";
 import { saveAs } from "file-saver";
+import { observer } from "mobx-react-lite";
 
 import foregroundColorForBackground from "../utils/foregroundColorForBackground";
 import { Color } from "../modules/palette";
@@ -172,10 +173,9 @@ type OpacitySelectorProps = {
   setOpacity: (newOpacity: number) => void;
 };
 
-export default function Pattern({ pattern }: Props) {
+const Pattern = observer(({ pattern }: Props) => {
   const ui = useStore((state) => state.ui);
   const togglePatternShift = useStore((state) => state.togglePatternShift);
-  const setPixelColor = useStore((state) => state.setPixelColor);
   const addPaletteColor = useStore((state) => state.addPaletteColor);
   const updatePaletteColor = useStore((state) => state.updatePaletteColor);
 
@@ -209,15 +209,17 @@ export default function Pattern({ pattern }: Props) {
 
       <PatternUi
         colorGrid={patternToColorGrid(pattern.pixels, pattern.palette.colors)}
-        onPaint={(x, y) => setPixelColor(currentColorIndex, x, y)}
+        onPaint={(x, y) => pattern.setPixelColor(currentColorIndex, x, y)}
         isShifted={ui.isPatternShifted}
         imageOverlay={imageUrl}
         imageOverlayOpacity={imageOpacity}
       />
     </>
   );
-}
+});
 
 type Props = {
   pattern: PatternType;
 };
+
+export default Pattern;
