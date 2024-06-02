@@ -176,8 +176,6 @@ type OpacitySelectorProps = {
 const Pattern = observer(({ pattern }: Props) => {
   const ui = useStore((state) => state.ui);
   const togglePatternShift = useStore((state) => state.togglePatternShift);
-  const addPaletteColor = useStore((state) => state.addPaletteColor);
-  const updatePaletteColor = useStore((state) => state.updatePaletteColor);
 
   const [currentColorIndex, setCurrentColorIndex] = useState(0);
   const [imageUrl, setImageUrl] = useState<string | null>(null);
@@ -203,8 +201,10 @@ const Pattern = observer(({ pattern }: Props) => {
         palette={pattern.palette.colors}
         selectedColorIndex={currentColorIndex}
         onSelectColorIndex={setCurrentColorIndex}
-        onAddColor={(newColor) => addPaletteColor(newColor)}
-        onUpdateColor={(index, newColor) => updatePaletteColor(index, newColor)}
+        onAddColor={(newColor) => pattern.palette.addColor(newColor)}
+        onUpdateColor={(index, newColor) =>
+          pattern.palette.updateColor(index, newColor)
+        }
       />
 
       <PatternUi
