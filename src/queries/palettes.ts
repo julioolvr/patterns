@@ -1,10 +1,6 @@
-import { useQuery } from "@tanstack/react-query";
-
+import tinycolor from "tinycolor2";
 import client from "../db/client";
-
-function listPalettes() {
-  return client.from("palettes").select();
-}
+import { Color } from "../modules/palette";
 
 export async function createPalette(data: CreatePaletteDto): Promise<Palette> {
   const result = await client.from("palettes").insert(data).select();
@@ -13,7 +9,12 @@ export async function createPalette(data: CreatePaletteDto): Promise<Palette> {
     throw result.error;
   }
 
-  return result.data[0];
+  const palette = result.data[0];
+
+  return {
+    ...palette,
+    colors: palette.colors.map((color) => tinycolor(color)),
+  };
 }
 
 type CreatePaletteDto = {
@@ -21,15 +22,7 @@ type CreatePaletteDto = {
   colors: Array<string>;
 };
 
-type Palette = {
+export type Palette = {
   id: string;
-  name: string;
-  colors: Array<string>;
+  colors: Array<Color>;
 };
-
-export function usePalettesList() {
-  return useQuery({
-    queryKey: ["palettes"],
-    queryFn: listPalettes,
-  });
-}
