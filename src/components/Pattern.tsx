@@ -3,7 +3,6 @@ import { FileInput, Stack, Slider } from "@mantine/core";
 import classNames from "classnames";
 import ExcelJS from "exceljs";
 import { saveAs } from "file-saver";
-import * as R from "remeda";
 
 import foregroundColorForBackground from "../utils/foregroundColorForBackground";
 import { Color } from "../modules/palette";
@@ -11,7 +10,7 @@ import PaletteSelector from "./PaletteSelector";
 
 import "./Pattern.css";
 import useStore from "../store";
-import { Pattern as PatternType } from "../queries/patterns";
+import { Pattern as PatternType } from "../modules/pattern";
 
 type ColorGrid = Array<
   Array<{
@@ -184,8 +183,6 @@ export default function Pattern({ pattern }: Props) {
   const [imageUrl, setImageUrl] = useState<string | null>(null);
   const [imageOpacity, setImageOpacity] = useState(0.5);
 
-  const pixelsMatrix = pixelsToMatrix(pattern.pixels, pattern.width);
-
   return (
     <>
       <Stack>
@@ -195,7 +192,7 @@ export default function Pattern({ pattern }: Props) {
         <button
           onClick={() =>
             downloadExcel(
-              patternToColorGrid(pixelsMatrix, pattern.palette.colors)
+              patternToColorGrid(pattern.pixels, pattern.palette.colors)
             )
           }
         >
@@ -211,7 +208,7 @@ export default function Pattern({ pattern }: Props) {
       />
 
       <PatternUi
-        colorGrid={patternToColorGrid(pixelsMatrix, pattern.palette.colors)}
+        colorGrid={patternToColorGrid(pattern.pixels, pattern.palette.colors)}
         onPaint={(x, y) => setPixelColor(currentColorIndex, x, y)}
         isShifted={ui.isPatternShifted}
         imageOverlay={imageUrl}
@@ -224,11 +221,3 @@ export default function Pattern({ pattern }: Props) {
 type Props = {
   pattern: PatternType;
 };
-
-function pixelsToMatrix(
-  pixels: Array<number>,
-  width: number
-): Array<Array<number>> {
-  const height = pixels.length / width;
-  return R.times(height, (row) => pixels.slice(width * row, width));
-}

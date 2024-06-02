@@ -1,18 +1,18 @@
-import tinycolor from "tinycolor2";
 import client from "../db/client";
-import { Palette, createPalette } from "./palettes";
+import { PaletteRow, createPalette } from "./palettes";
+import { Pattern } from "../modules/pattern";
 
 export async function listPatterns() {
   return await client.from("patterns").select();
 }
 
-export type Pattern = {
+export type PatternRow = {
   id: string;
   name: string;
   height: number;
   width: number;
   pixels: Array<number>;
-  palette: Palette;
+  palette: PaletteRow;
 };
 
 export async function getPattern(patternId: string): Promise<Pattern> {
@@ -46,15 +46,7 @@ export async function getPattern(patternId: string): Promise<Pattern> {
     throw new Error("Palette not found");
   }
 
-  const palette = {
-    ...pattern.palettes,
-    colors: pattern.palettes.colors.map((color) => tinycolor(color)),
-  };
-
-  return {
-    ...pattern,
-    palette,
-  };
+  return Pattern.fromDatabase({ ...pattern, palette: pattern.palettes });
 }
 
 export async function createPattern(data: CreatePatternDto) {
