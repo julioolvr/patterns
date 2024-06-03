@@ -78,7 +78,9 @@ function pixelsToMatrix(
   width: number
 ): Array<Array<number>> {
   const height = pixels.length / width;
-  return R.times(height, (row) => pixels.slice(width * row, width));
+  return R.times(height, (row) =>
+    pixels.slice(width * row, width * row + width)
+  );
 }
 
 function withDefaultPixels(
