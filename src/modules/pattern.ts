@@ -3,6 +3,7 @@ import { makeAutoObservable, reaction } from "mobx";
 
 import { Palette } from "./palette";
 import { PatternRow, updatePattern } from "../queries/patterns";
+import client from "../db/client";
 
 const debouncedSave = R.debounce(
   (data: PatternRow) =>
@@ -71,6 +72,11 @@ export class Pattern {
       pixels: this.pixels.flat(),
       palette: this.palette.asDatabase,
     };
+  }
+
+  get imageUrl(): string {
+    return client.storage.from("references").getPublicUrl(`${this.id}.jpg`).data
+      .publicUrl;
   }
 }
 

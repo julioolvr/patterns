@@ -178,14 +178,15 @@ const Pattern = observer(({ pattern }: Props) => {
   const togglePatternShift = useStore((state) => state.togglePatternShift);
 
   const [currentColorIndex, setCurrentColorIndex] = useState(0);
-  const [imageUrl, setImageUrl] = useState<string | null>(null);
   const [imageOpacity, setImageOpacity] = useState(0.5);
 
   return (
     <>
       <Stack>
         <button onClick={togglePatternShift}>Toggle shift</button>
-        <ImageSelector onSelect={(imageUrl) => setImageUrl(imageUrl)} />
+        <ImageSelector
+          onSelect={(imageUrl) => console.log("imageUrl", imageUrl)}
+        />
         <OpacitySelector opacity={imageOpacity} setOpacity={setImageOpacity} />
         <button
           onClick={() =>
@@ -211,7 +212,7 @@ const Pattern = observer(({ pattern }: Props) => {
         colorGrid={patternToColorGrid(pattern.pixels, pattern.palette.colors)}
         onPaint={(x, y) => pattern.setPixelColor(currentColorIndex, x, y)}
         isShifted={ui.isPatternShifted}
-        imageOverlay={imageUrl}
+        imageOverlay={pattern.imageUrl}
         imageOverlayOpacity={imageOpacity}
       />
     </>
