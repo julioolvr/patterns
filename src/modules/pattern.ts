@@ -5,7 +5,8 @@ import { Palette } from "./palette";
 import { PatternRow, updatePattern } from "../queries/patterns";
 
 const debouncedSave = R.debounce(
-  (data: PatternRow) => updatePattern(data.id, { pixels: data.pixels }),
+  (data: PatternRow) =>
+    updatePattern(data.id, { pixels: data.pixels, palette: data.palette }),
   {
     waitMs: 1000,
   }

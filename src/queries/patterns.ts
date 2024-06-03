@@ -68,6 +68,12 @@ type CreatePatternDto = {
 };
 
 export async function updatePattern(id: string, data: UpdatePatternDto) {
+  // TODO: Consider updating patterns and palettes separately
+  await client
+    .from("palettes")
+    .update({ colors: data.palette.colors })
+    .eq("id", data.palette.id);
+
   return await client
     .from("patterns")
     .update({ pixels: data.pixels })
@@ -76,4 +82,5 @@ export async function updatePattern(id: string, data: UpdatePatternDto) {
 
 type UpdatePatternDto = {
   pixels: Array<number>;
+  palette: PaletteRow;
 };
