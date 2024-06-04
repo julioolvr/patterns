@@ -1,10 +1,15 @@
 import { useState } from "react";
-import { FileInput, Stack, Slider } from "@mantine/core";
+import { Slider, Affix, ActionIcon, FileButton } from "@mantine/core";
 import classNames from "classnames";
 import ExcelJS from "exceljs";
 import { saveAs } from "file-saver";
 import { observer } from "mobx-react-lite";
 import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
+import {
+  IconDownload,
+  IconPhotoScan,
+  IconSwitchHorizontal,
+} from "@tabler/icons-react";
 
 import foregroundColorForBackground from "../utils/foregroundColorForBackground";
 import { Color } from "../modules/palette";
@@ -138,13 +143,16 @@ type PatternUiProps = {
 
 function ImageSelector({ onSelect }: ImageSelectorProps) {
   return (
-    <div>
-      <FileInput
-        accept=".jpg, .jpeg, .png"
-        onChange={(file) => file && onSelect(file)}
-        placeholder="Select an image"
-      />
-    </div>
+    <FileButton
+      accept=".jpg, .jpeg, .png"
+      onChange={(file) => file && onSelect(file)}
+    >
+      {(props) => (
+        <ActionIcon {...props}>
+          <IconPhotoScan />
+        </ActionIcon>
+      )}
+    </FileButton>
   );
 }
 
@@ -184,26 +192,37 @@ const Pattern = observer(({ pattern }: Props) => {
       panning={{ wheelPanning: true }}
       wheel={{ wheelDisabled: true }}
     >
-      <Stack>
-        <button onClick={togglePatternShift}>Toggle shift</button>
-        <ImageSelector
-          onSelect={(file) => {
-            client.storage
-              .from("references")
-              .upload(pattern.id, file, { upsert: true });
-          }}
-        />
-        <OpacitySelector opacity={imageOpacity} setOpacity={setImageOpacity} />
-        <button
-          onClick={() =>
-            downloadExcel(
-              patternToColorGrid(pattern.pixels, pattern.palette.colors)
-            )
-          }
-        >
-          Download Excel
-        </button>
-      </Stack>
+      <Affix position={{ left: "50%", bottom: "20px" }}>
+        <ActionIcon.Group>
+          <ActionIcon onClick={togglePatternShift}>
+            <IconSwitchHorizontal />
+          </ActionIcon>
+
+          <ImageSelector
+            onSelect={(file) => {
+              client.storage
+                .from("references")
+                .upload(pattern.id, file, { upsert: true });
+            }}
+          />
+
+          <OpacitySelector
+            opacity={imageOpacity}
+            setOpacity={setImageOpacity}
+          />
+
+          <ActionIcon
+            onClick={() =>
+              downloadExcel(
+                patternToColorGrid(pattern.pixels, pattern.palette.colors)
+              )
+            }
+          >
+            <IconDownload />
+          </ActionIcon>
+        </ActionIcon.Group>
+      </Affix>
+
       <PaletteSelector
         palette={pattern.palette.colors}
         selectedColorIndex={currentColorIndex}
