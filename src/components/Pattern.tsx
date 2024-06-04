@@ -4,6 +4,7 @@ import classNames from "classnames";
 import ExcelJS from "exceljs";
 import { saveAs } from "file-saver";
 import { observer } from "mobx-react-lite";
+import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
 
 import foregroundColorForBackground from "../utils/foregroundColorForBackground";
 import { Color } from "../modules/palette";
@@ -90,36 +91,40 @@ function PatternUi({
   imageOverlayOpacity,
 }: PatternUiProps) {
   return (
-    <div
-      className={classNames("pattern", { "pattern__is-shifted": isShifted })}
-    >
-      {isShifted && imageOverlay && (
-        <img
-          className="pattern--image-overlay"
-          src={imageOverlay}
-          style={{ opacity: imageOverlayOpacity }}
-        />
-      )}
-      <div>
-        {colorGrid.map((row, y) => (
-          <div key={y} className="pattern--row">
-            {row.map((cell, x) => (
-              <button
-                key={x}
-                className="pattern--cell"
-                style={{
-                  backgroundColor: cell.color.toHexString(),
-                  color: foregroundColorForBackground(cell.color).toHexString(),
-                }}
-                onClick={() => onPaint(x, y)}
-              >
-                {cell.colorCount}
-              </button>
-            ))}
-          </div>
-        ))}
+    <TransformComponent>
+      <div
+        className={classNames("pattern", { "pattern__is-shifted": isShifted })}
+      >
+        {isShifted && imageOverlay && (
+          <img
+            className="pattern--image-overlay"
+            src={imageOverlay}
+            style={{ opacity: imageOverlayOpacity }}
+          />
+        )}
+        <div>
+          {colorGrid.map((row, y) => (
+            <div key={y} className="pattern--row">
+              {row.map((cell, x) => (
+                <button
+                  key={x}
+                  className="pattern--cell"
+                  style={{
+                    backgroundColor: cell.color.toHexString(),
+                    color: foregroundColorForBackground(
+                      cell.color
+                    ).toHexString(),
+                  }}
+                  onClick={() => onPaint(x, y)}
+                >
+                  {cell.colorCount}
+                </button>
+              ))}
+            </div>
+          ))}
+        </div>
       </div>
-    </div>
+    </TransformComponent>
   );
 }
 
@@ -175,7 +180,10 @@ const Pattern = observer(({ pattern }: Props) => {
   const [imageOpacity, setImageOpacity] = useState(0.5);
 
   return (
-    <>
+    <TransformWrapper
+      panning={{ wheelPanning: true }}
+      wheel={{ wheelDisabled: true }}
+    >
       <Stack>
         <button onClick={togglePatternShift}>Toggle shift</button>
         <ImageSelector
@@ -213,7 +221,7 @@ const Pattern = observer(({ pattern }: Props) => {
         imageOverlay={pattern.imageUrl}
         imageOverlayOpacity={imageOpacity}
       />
-    </>
+    </TransformWrapper>
   );
 });
 
