@@ -191,6 +191,7 @@ const Pattern = observer(({ pattern }: Props) => {
     <TransformWrapper
       panning={{ wheelPanning: true }}
       wheel={{ wheelDisabled: true }}
+      doubleClick={{ disabled: true }}
       minScale={0.2}
       centerOnInit
     >
