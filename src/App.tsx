@@ -9,7 +9,6 @@ import "@mantine/spotlight/styles.css";
 
 import { routeTree } from "./routeTree.gen";
 
-import "./App.css";
 import queryClient from "./queryClient";
 
 const router = createRouter({

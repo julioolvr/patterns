@@ -191,6 +191,8 @@ const Pattern = observer(({ pattern }: Props) => {
     <TransformWrapper
       panning={{ wheelPanning: true }}
       wheel={{ wheelDisabled: true }}
+      minScale={0.2}
+      centerOnInit
     >
       <Affix position={{ left: "50%", bottom: "20px" }}>
         <ActionIcon.Group>

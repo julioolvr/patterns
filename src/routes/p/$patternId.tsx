@@ -1,8 +1,10 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { Title } from "@mantine/core";
+import { Stack, Title } from "@mantine/core";
 
 import { getPattern } from "../../queries/patterns";
 import PatternUi from "../../components/Pattern";
+
+import "./$patternId.css";
 
 export const Route = createFileRoute("/p/$patternId")({
   component: Pattern,
@@ -13,9 +15,9 @@ function Pattern() {
   const data = Route.useLoaderData();
 
   return (
-    <div>
+    <Stack className="pattern-page-container">
       <Title order={1}>{data.name}</Title>
       <PatternUi pattern={data} />
-    </div>
+    </Stack>
   );
 }
