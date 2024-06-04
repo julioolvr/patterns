@@ -13,6 +13,7 @@ import "./Pattern.css";
 import useStore from "../store";
 import { Pattern as PatternType } from "../modules/pattern";
 import client from "../db/client";
+import { coordinatesToExcel } from "../modules/excel";
 
 type ColorGrid = Array<
   Array<{
@@ -20,14 +21,6 @@ type ColorGrid = Array<
     colorCount: number | undefined;
   }>
 >;
-
-function coordinatesToExcel(x: number, y: number): string {
-  // TODO: Do this right
-  const column = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"[y % 26];
-  const row = x + 1;
-
-  return `${column}${row}`;
-}
 
 async function downloadExcel(colorGrid: ColorGrid) {
   const workbook = new ExcelJS.Workbook();
