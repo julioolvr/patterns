@@ -75,7 +75,7 @@ export class Pattern {
   }
 
   get imageUrl(): string {
-    return client.storage.from("references").getPublicUrl(`${this.id}.jpg`).data
+    return client.storage.from("references").getPublicUrl(this.id).data
       .publicUrl;
   }
 }

@@ -12,6 +12,7 @@ import PaletteSelector from "./PaletteSelector";
 import "./Pattern.css";
 import useStore from "../store";
 import { Pattern as PatternType } from "../modules/pattern";
+import client from "../db/client";
 
 type ColorGrid = Array<
   Array<{
@@ -142,7 +143,7 @@ function ImageSelector({ onSelect }: ImageSelectorProps) {
     <div>
       <FileInput
         accept=".jpg, .jpeg, .png"
-        onChange={(file) => file && onSelect(URL.createObjectURL(file))}
+        onChange={(file) => file && onSelect(file)}
         placeholder="Select an image"
       />
     </div>
@@ -150,7 +151,7 @@ function ImageSelector({ onSelect }: ImageSelectorProps) {
 }
 
 type ImageSelectorProps = {
-  onSelect: (imageUrl: string) => void;
+  onSelect: (image: File) => void;
 };
 
 function OpacitySelector({ opacity, setOpacity }: OpacitySelectorProps) {
@@ -185,7 +186,11 @@ const Pattern = observer(({ pattern }: Props) => {
       <Stack>
         <button onClick={togglePatternShift}>Toggle shift</button>
         <ImageSelector
-          onSelect={(imageUrl) => console.log("imageUrl", imageUrl)}
+          onSelect={(file) => {
+            client.storage
+              .from("references")
+              .upload(pattern.id, file, { upsert: true });
+          }}
         />
         <OpacitySelector opacity={imageOpacity} setOpacity={setImageOpacity} />
         <button
