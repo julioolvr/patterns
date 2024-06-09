@@ -20,6 +20,7 @@ import useStore from "../store";
 import { Pattern as PatternType } from "../modules/pattern";
 import client from "../db/client";
 import { coordinatesToExcel } from "../modules/excel";
+import { useDebouncedCallback } from "@mantine/hooks";
 
 type ColorGrid = Array<
   Array<{
@@ -94,8 +95,17 @@ function PatternUi({
   isShifted,
   imageOverlay,
   imageOverlayOpacity,
+  imageOverlayScale,
+  imageOverlayPositionX,
+  imageOverlayPositionY,
+  onImageOverlayTransform,
   allowTransformImageOverlay,
 }: PatternUiProps) {
+  const onImageOverlayTransformDebounced = useDebouncedCallback(
+    onImageOverlayTransform,
+    1000
+  );
+
   return (
     <TransformComponent>
       <div
@@ -106,9 +116,16 @@ function PatternUi({
             disabled={!allowTransformImageOverlay}
             wheel={{ wheelDisabled: true, smoothStep: 0.01 }}
             limitToBounds={false}
-            initialPositionX={240.17}
-            initialPositionY={538.34}
-            initialScale={1.187}
+            initialPositionX={imageOverlayPositionX}
+            initialPositionY={imageOverlayPositionY}
+            initialScale={imageOverlayScale}
+            onTransformed={(_, transform) =>
+              onImageOverlayTransformDebounced(
+                transform.scale,
+                transform.positionX,
+                transform.positionY
+              )
+            }
           >
             <div
               className={classNames("pattern__image-overlay-container", {
@@ -158,6 +175,14 @@ type PatternUiProps = {
   isShifted: boolean;
   imageOverlay: string | null;
   imageOverlayOpacity: number;
+  imageOverlayScale: number;
+  imageOverlayPositionX: number;
+  imageOverlayPositionY: number;
+  onImageOverlayTransform: (
+    scale: number,
+    positionX: number,
+    positionY: number
+  ) => void;
   allowTransformImageOverlay: boolean;
 };
 
@@ -272,6 +297,14 @@ const Pattern = observer(({ pattern }: Props) => {
         onPaint={(x, y) => pattern.setPixelColor(currentColorIndex, x, y)}
         isShifted={ui.isPatternShifted}
         imageOverlay={pattern.imageUrl}
+        imageOverlayScale={pattern.imageOverlayScale}
+        imageOverlayPositionX={pattern.imageOverlayPositionX}
+        imageOverlayPositionY={pattern.imageOverlayPositionY}
+        onImageOverlayTransform={(scale, positionX, positionY) => {
+          pattern.imageOverlayScale = scale;
+          pattern.imageOverlayPositionX = positionX;
+          pattern.imageOverlayPositionY = positionY;
+        }}
         imageOverlayOpacity={imageOpacity}
         allowTransformImageOverlay={!editingPattern}
       />

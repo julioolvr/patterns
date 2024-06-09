@@ -35,6 +35,9 @@ export type Database = {
           created_at: string
           height: number
           id: string
+          image_overlay_position_x: number
+          image_overlay_position_y: number
+          image_overlay_scale: number
           name: string
           palette_id: string
           pixels: number[]
@@ -44,6 +47,9 @@ export type Database = {
           created_at?: string
           height: number
           id?: string
+          image_overlay_position_x?: number
+          image_overlay_position_y?: number
+          image_overlay_scale?: number
           name: string
           palette_id: string
           pixels: number[]
@@ -53,6 +59,9 @@ export type Database = {
           created_at?: string
           height?: number
           id?: string
+          image_overlay_position_x?: number
+          image_overlay_position_y?: number
+          image_overlay_scale?: number
           name?: string
           palette_id?: string
           pixels?: number[]

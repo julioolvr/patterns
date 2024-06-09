@@ -7,7 +7,13 @@ import client from "../db/client";
 
 const debouncedSave = R.debounce(
   (data: PatternRow) =>
-    updatePattern(data.id, { pixels: data.pixels, palette: data.palette }),
+    updatePattern(data.id, {
+      pixels: data.pixels,
+      palette: data.palette,
+      imageOverlayScale: data.image_overlay_scale,
+      imageOverlayPositionX: data.image_overlay_position_x,
+      imageOverlayPositionY: data.image_overlay_position_y,
+    }),
   {
     waitMs: 1000,
   }
@@ -20,6 +26,9 @@ export class Pattern {
   public width: number;
   public pixels: Array<Array<number>>;
   public palette: Palette;
+  public imageOverlayScale: number;
+  public imageOverlayPositionX: number;
+  public imageOverlayPositionY: number;
 
   saveHandler: () => void;
 
@@ -29,7 +38,10 @@ export class Pattern {
     height: number,
     width: number,
     pixels: Array<Array<number>>,
-    palette: Palette
+    palette: Palette,
+    imageOverlayScale: number,
+    imageOverlayPositionX: number,
+    imageOverlayPositionY: number
   ) {
     makeAutoObservable(this, {
       saveHandler: false,
@@ -40,6 +52,9 @@ export class Pattern {
     this.width = width;
     this.pixels = withDefaultPixels(pixels, width, height);
     this.palette = palette;
+    this.imageOverlayScale = imageOverlayScale;
+    this.imageOverlayPositionX = imageOverlayPositionX;
+    this.imageOverlayPositionY = imageOverlayPositionY;
 
     this.saveHandler = reaction(
       () => this.asDatabase,
@@ -55,7 +70,10 @@ export class Pattern {
       row.height,
       row.width,
       pixelsToMatrix(row.pixels, row.width),
-      Palette.fromDatabase(row.palette)
+      Palette.fromDatabase(row.palette),
+      row.image_overlay_scale,
+      row.image_overlay_position_x,
+      row.image_overlay_position_y
     );
   }
 
@@ -71,6 +89,9 @@ export class Pattern {
       width: this.width,
       pixels: this.pixels.flat(),
       palette: this.palette.asDatabase,
+      image_overlay_scale: this.imageOverlayScale,
+      image_overlay_position_x: this.imageOverlayPositionX,
+      image_overlay_position_y: this.imageOverlayPositionY,
     };
   }
 

@@ -13,6 +13,9 @@ export type PatternRow = {
   width: number;
   pixels: Array<number>;
   palette: PaletteRow;
+  image_overlay_scale: number;
+  image_overlay_position_x: number;
+  image_overlay_position_y: number;
 };
 
 export async function getPattern(patternId: string): Promise<Pattern> {
@@ -25,6 +28,9 @@ export async function getPattern(patternId: string): Promise<Pattern> {
     width,
     height,
     pixels,
+    image_overlay_scale,
+    image_overlay_position_x,
+    image_overlay_position_y,
     palettes ( id, colors )
   `
     )
@@ -76,11 +82,19 @@ export async function updatePattern(id: string, data: UpdatePatternDto) {
 
   return await client
     .from("patterns")
-    .update({ pixels: data.pixels })
+    .update({
+      pixels: data.pixels,
+      image_overlay_scale: data.imageOverlayScale,
+      image_overlay_position_x: data.imageOverlayPositionX,
+      image_overlay_position_y: data.imageOverlayPositionY,
+    })
     .eq("id", id);
 }
 
 type UpdatePatternDto = {
   pixels: Array<number>;
   palette: PaletteRow;
+  imageOverlayScale: number;
+  imageOverlayPositionX: number;
+  imageOverlayPositionY: number;
 };
