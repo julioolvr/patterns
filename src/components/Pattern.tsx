@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Slider, Affix, ActionIcon, FileButton } from "@mantine/core";
+import { Slider, Affix, ActionIcon, FileButton, Switch } from "@mantine/core";
 import classNames from "classnames";
 import ExcelJS from "exceljs";
 import { saveAs } from "file-saver";
@@ -94,26 +94,45 @@ function PatternUi({
   isShifted,
   imageOverlay,
   imageOverlayOpacity,
+  allowTransformImageOverlay,
 }: PatternUiProps) {
   return (
     <TransformComponent>
       <div
-        className={classNames("pattern", { "pattern__is-shifted": isShifted })}
+        className={classNames("pattern", { "pattern--is-shifted": isShifted })}
       >
         {isShifted && imageOverlay && (
-          <img
-            className="pattern--image-overlay"
-            src={imageOverlay}
-            style={{ opacity: imageOverlayOpacity }}
-          />
+          <TransformWrapper
+            disabled={!allowTransformImageOverlay}
+            wheel={{ wheelDisabled: true, smoothStep: 0.01 }}
+            limitToBounds={false}
+            initialPositionX={240.17}
+            initialPositionY={538.34}
+            initialScale={1.187}
+          >
+            <div
+              className={classNames("pattern__image-overlay-container", {
+                "pattern__image-overlay-container--transform-disabled":
+                  !allowTransformImageOverlay,
+              })}
+            >
+              <TransformComponent wrapperClass="pattern__image-overlay-transform-wrapper">
+                <img
+                  className="pattern__image-overlay"
+                  src={imageOverlay}
+                  style={{ opacity: imageOverlayOpacity }}
+                />
+              </TransformComponent>
+            </div>
+          </TransformWrapper>
         )}
         <div>
           {colorGrid.map((row, y) => (
-            <div key={y} className="pattern--row">
+            <div key={y} className="pattern__row">
               {row.map((cell, x) => (
                 <button
                   key={x}
-                  className="pattern--cell"
+                  className="pattern__cell"
                   style={{
                     backgroundColor: cell.color.toHexString(),
                     color: foregroundColorForBackground(
@@ -139,6 +158,7 @@ type PatternUiProps = {
   isShifted: boolean;
   imageOverlay: string | null;
   imageOverlayOpacity: number;
+  allowTransformImageOverlay: boolean;
 };
 
 function ImageSelector({ onSelect }: ImageSelectorProps) {
@@ -183,6 +203,7 @@ type OpacitySelectorProps = {
 const Pattern = observer(({ pattern }: Props) => {
   const ui = useStore((state) => state.ui);
   const togglePatternShift = useStore((state) => state.togglePatternShift);
+  const [editingPattern, setEditingPattern] = useState(true);
 
   const [currentColorIndex, setCurrentColorIndex] = useState(0);
   const [imageOpacity, setImageOpacity] = useState(0.5);
@@ -190,10 +211,12 @@ const Pattern = observer(({ pattern }: Props) => {
   return (
     <TransformWrapper
       panning={{ wheelPanning: true }}
-      wheel={{ wheelDisabled: true }}
+      wheel={{ wheelDisabled: true, smoothStep: 0.01 }}
       doubleClick={{ disabled: true }}
       minScale={0.2}
       centerOnInit
+      disabled={!editingPattern}
+      initialScale={0.2}
     >
       <Affix position={{ left: "50%", bottom: "20px" }}>
         <ActionIcon.Group>
@@ -223,6 +246,14 @@ const Pattern = observer(({ pattern }: Props) => {
           >
             <IconDownload />
           </ActionIcon>
+
+          <Switch
+            label="Edit image"
+            checked={!editingPattern}
+            onChange={(event) =>
+              setEditingPattern(!event.currentTarget.checked)
+            }
+          />
         </ActionIcon.Group>
       </Affix>
 
@@ -242,6 +273,7 @@ const Pattern = observer(({ pattern }: Props) => {
         isShifted={ui.isPatternShifted}
         imageOverlay={pattern.imageUrl}
         imageOverlayOpacity={imageOpacity}
+        allowTransformImageOverlay={!editingPattern}
       />
     </TransformWrapper>
   );
