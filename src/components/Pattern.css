@@ -11,12 +11,12 @@
   display: flex;
 }
 
-.pattern--is-shifted .pattern__row:nth-child(odd) {
-  margin-left: -0.5em;
+.pattern--is-shifted .pattern__row {
+  margin-left: 0.5em;
 }
 
-.pattern--is-shifted .pattern__row:nth-child(even) {
-  margin-left: 0.5em;
+.pattern--is-shifted .pattern__row.pattern__row--left {
+  margin-left: -0.5em;
 }
 
 .pattern__cell {

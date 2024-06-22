@@ -145,7 +145,12 @@ function PatternUi({
         )}
         <div>
           {colorGrid.map((row, y) => (
-            <div key={y} className="pattern__row">
+            <div
+              key={y}
+              className={classNames("pattern__row", {
+                "pattern__row--left": shouldShiftLeft(colorGrid.length, y),
+              })}
+            >
               {row.map((cell, x) => (
                 <button
                   key={x}
@@ -317,3 +322,14 @@ type Props = {
 };
 
 export default Pattern;
+
+function shouldShiftLeft(numberOfRows: number, rowIndex: number): boolean {
+  // Last row of the pattern should be shifted left
+
+  if (numberOfRows % 2 === 0) {
+    // Even number of rows means that that the last row will be odd
+    return rowIndex % 2 !== 0;
+  }
+
+  return rowIndex % 2 === 0;
+}
