@@ -8,14 +8,31 @@
 }
 
 .pattern__row {
+  position: relative;
+}
+
+.pattern__row-number {
+  position: absolute;
+  top: calc(50% - 13px);
+}
+
+.pattern__row-number--left {
+  left: -35px;
+}
+
+.pattern__row-number--right {
+  right: -25px;
+}
+
+.pattern__row-cells {
   display: flex;
 }
 
-.pattern--is-shifted .pattern__row {
+.pattern--is-shifted .pattern__row-cells {
   margin-left: 0.5em;
 }
 
-.pattern--is-shifted .pattern__row.pattern__row--left {
+.pattern--is-shifted .pattern__row--left .pattern__row-cells {
   margin-left: -0.5em;
 }
 
@@ -35,6 +52,7 @@
 
 .pattern__image-overlay-container {
   position: absolute;
+  z-index: 1;
   top: 0;
   bottom: 0;
   left: 0;

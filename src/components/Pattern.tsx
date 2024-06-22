@@ -151,21 +151,31 @@ function PatternUi({
                 "pattern__row--left": shouldShiftLeft(colorGrid.length, y),
               })}
             >
-              {row.map((cell, x) => (
-                <button
-                  key={x}
-                  className="pattern__cell"
-                  style={{
-                    backgroundColor: cell.color.toHexString(),
-                    color: foregroundColorForBackground(
-                      cell.color
-                    ).toHexString(),
-                  }}
-                  onClick={() => onPaint(x, y)}
-                >
-                  {cell.colorCount}
-                </button>
-              ))}
+              <div className="pattern__row-number pattern__row-number--left">
+                {rowNumber(colorGrid.length, y)}
+              </div>
+
+              <div className="pattern__row-cells">
+                {row.map((cell, x) => (
+                  <button
+                    key={x}
+                    className="pattern__cell"
+                    style={{
+                      backgroundColor: cell.color.toHexString(),
+                      color: foregroundColorForBackground(
+                        cell.color
+                      ).toHexString(),
+                    }}
+                    onClick={() => onPaint(x, y)}
+                  >
+                    {cell.colorCount}
+                  </button>
+                ))}
+              </div>
+
+              <div className="pattern__row-number pattern__row-number--right">
+                {rowNumber(colorGrid.length, y)}
+              </div>
             </div>
           ))}
         </div>
@@ -323,13 +333,10 @@ type Props = {
 
 export default Pattern;
 
+function rowNumber(numberOfRows: number, rowIndex: number): number {
+  return numberOfRows - rowIndex;
+}
+
 function shouldShiftLeft(numberOfRows: number, rowIndex: number): boolean {
-  // Last row of the pattern should be shifted left
-
-  if (numberOfRows % 2 === 0) {
-    // Even number of rows means that that the last row will be odd
-    return rowIndex % 2 !== 0;
-  }
-
-  return rowIndex % 2 === 0;
+  return rowNumber(numberOfRows, rowIndex) % 2 !== 0;
 }
