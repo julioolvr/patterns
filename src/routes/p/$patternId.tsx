@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { Stack, Title } from "@mantine/core";
+import { Stack } from "@mantine/core";
 
 import { getPattern } from "../../queries/patterns";
 import PatternUi from "../../components/Pattern";
@@ -16,7 +16,6 @@ function Pattern() {
 
   return (
     <Stack className="pattern-page-container">
-      <Title order={1}>{data.name}</Title>
       <PatternUi pattern={data} />
     </Stack>
   );
