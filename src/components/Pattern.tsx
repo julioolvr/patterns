@@ -297,15 +297,17 @@ const Pattern = observer(({ pattern }: Props) => {
         </ActionIcon.Group>
       </Affix>
 
-      <PaletteSelector
-        palette={pattern.palette.colors}
-        selectedColorIndex={currentColorIndex}
-        onSelectColorIndex={setCurrentColorIndex}
-        onAddColor={(newColor) => pattern.palette.addColor(newColor)}
-        onUpdateColor={(index, newColor) =>
-          pattern.palette.updateColor(index, newColor)
-        }
-      />
+      <Affix position={{ left: "20px", top: "20px" }}>
+        <PaletteSelector
+          palette={pattern.palette.colors}
+          selectedColorIndex={currentColorIndex}
+          onSelectColorIndex={setCurrentColorIndex}
+          onAddColor={(newColor) => pattern.palette.addColor(newColor)}
+          onUpdateColor={(index, newColor) =>
+            pattern.palette.updateColor(index, newColor)
+          }
+        />
+      </Affix>
 
       <PatternUi
         colorGrid={patternToColorGrid(pattern.pixels, pattern.palette.colors)}
