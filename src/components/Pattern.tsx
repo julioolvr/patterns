@@ -3,17 +3,18 @@ import { Affix } from "@mantine/core";
 import classNames from "classnames";
 import { observer } from "mobx-react-lite";
 import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
+import { Link } from "@tanstack/react-router";
+import { useDebouncedCallback } from "@mantine/hooks";
 
 import foregroundColorForBackground from "../utils/foregroundColorForBackground";
 import { Color } from "../modules/palette";
-import PaletteSelector from "./PaletteSelector";
+import { Pattern as PatternType } from "../modules/pattern";
+import useStore from "../store";
+import useSequence from "../hooks/useSequence";
 
 import "./Pattern.css";
-import useStore from "../store";
-import { Pattern as PatternType } from "../modules/pattern";
-import { useDebouncedCallback } from "@mantine/hooks";
+import PaletteSelector from "./PaletteSelector";
 import Toolbox from "./Toolbox";
-import useSequence from "../hooks/useSequence";
 
 type ColorGrid = Array<
   Array<{
@@ -218,6 +219,10 @@ const Pattern = observer(({ pattern }: Props) => {
             pattern.palette.updateColor(index, newColor)
           }
         />
+      </Affix>
+
+      <Affix position={{ right: "20px", top: "20px" }}>
+        <Link to="/"> Close</Link>
       </Affix>
 
       <PatternUi
