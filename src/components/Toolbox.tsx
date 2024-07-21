@@ -1,8 +1,17 @@
-import { ActionIcon, FileButton, Switch, Slider } from "@mantine/core";
+import {
+  ActionIcon,
+  FileButton,
+  Popover,
+  Slider,
+  Stack,
+  Tooltip,
+} from "@mantine/core";
 import {
   IconDownload,
   IconSwitchHorizontal,
-  IconPhotoScan,
+  IconPhotoUp,
+  IconArrowsMove,
+  IconSun,
 } from "@tabler/icons-react";
 import ExcelJS from "exceljs";
 import { saveAs } from "file-saver";
@@ -16,16 +25,23 @@ import foregroundColorForBackground from "../utils/foregroundColorForBackground"
 export default function Toolbox({
   pattern,
   imageOpacity,
+  isPatternShifted,
   onChangeImageOpacity,
   onTogglePatternShift,
   isEditingPattern,
-  setEditingPattern,
+  onToggleEditingPattern,
 }: Props) {
   return (
-    <ActionIcon.Group>
-      <ActionIcon onClick={onTogglePatternShift}>
-        <IconSwitchHorizontal />
-      </ActionIcon>
+    <ActionIcon.Group bg="white">
+      <Tooltip label="Shift rows">
+        <ActionIcon
+          onClick={onTogglePatternShift}
+          size="xl"
+          variant={isPatternShifted ? "filled" : "outline"}
+        >
+          <IconSwitchHorizontal />
+        </ActionIcon>
+      </Tooltip>
 
       <ImageSelector
         onSelect={(file) => {
@@ -40,32 +56,41 @@ export default function Toolbox({
         setOpacity={onChangeImageOpacity}
       />
 
-      <ActionIcon
-        onClick={() =>
-          downloadExcel(
-            patternToColorGrid(pattern.pixels, pattern.palette.colors)
-          )
-        }
-      >
-        <IconDownload />
-      </ActionIcon>
+      <Tooltip label="Download Excel file">
+        <ActionIcon
+          size="xl"
+          onClick={() =>
+            downloadExcel(
+              patternToColorGrid(pattern.pixels, pattern.palette.colors)
+            )
+          }
+          variant="default"
+        >
+          <IconDownload />
+        </ActionIcon>
+      </Tooltip>
 
-      <Switch
-        label="Edit image"
-        checked={!isEditingPattern}
-        onChange={(event) => setEditingPattern(!event.currentTarget.checked)}
-      />
+      <Tooltip label="Adjust reference image">
+        <ActionIcon
+          onClick={onToggleEditingPattern}
+          size="xl"
+          variant={isEditingPattern ? "outline" : "filled"}
+        >
+          <IconArrowsMove />
+        </ActionIcon>
+      </Tooltip>
     </ActionIcon.Group>
   );
 }
 
 type Props = {
+  isPatternShifted: boolean;
   onTogglePatternShift: () => void;
   pattern: Pattern;
   imageOpacity: number;
   onChangeImageOpacity: (newOpacity: number) => void;
   isEditingPattern: boolean;
-  setEditingPattern: (isEditingPattern: boolean) => void;
+  onToggleEditingPattern: () => void;
 };
 
 function ImageSelector({ onSelect }: ImageSelectorProps) {
@@ -75,9 +100,11 @@ function ImageSelector({ onSelect }: ImageSelectorProps) {
       onChange={(file) => file && onSelect(file)}
     >
       {(props) => (
-        <ActionIcon {...props}>
-          <IconPhotoScan />
-        </ActionIcon>
+        <Tooltip label="Upload reference image">
+          <ActionIcon {...props} size="xl" variant="default">
+            <IconPhotoUp />
+          </ActionIcon>
+        </Tooltip>
       )}
     </FileButton>
   );
@@ -149,16 +176,26 @@ function patternToColorGrid(
 
 function OpacitySelector({ opacity, setOpacity }: OpacitySelectorProps) {
   return (
-    <div>
-      Opacity:{" "}
-      <Slider
-        min={0}
-        max={1}
-        step={0.05}
-        value={opacity}
-        onChange={(newOpacity) => setOpacity(newOpacity)}
-      />
-    </div>
+    <Popover>
+      <Popover.Target>
+        <Tooltip label="Adjust opacity">
+          <ActionIcon variant="default" size="xl">
+            <IconSun />
+          </ActionIcon>
+        </Tooltip>
+      </Popover.Target>
+      <Popover.Dropdown>
+        <Stack w={100}>
+          <Slider
+            min={0}
+            max={1}
+            step={0.05}
+            value={opacity}
+            onChange={(newOpacity) => setOpacity(newOpacity)}
+          />
+        </Stack>
+      </Popover.Dropdown>
+    </Popover>
   );
 }
 

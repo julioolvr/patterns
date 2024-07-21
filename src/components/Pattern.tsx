@@ -184,14 +184,15 @@ const Pattern = observer(({ pattern }: Props) => {
       disabled={!editingPattern}
       initialScale={0.2}
     >
-      <Affix position={{ left: "50%", bottom: "20px" }}>
+      <Affix position={{ left: "45%", bottom: "20px" }}>
         <Toolbox
           pattern={pattern}
           imageOpacity={imageOpacity}
           onChangeImageOpacity={setImageOpacity}
+          isPatternShifted={ui.isPatternShifted}
           onTogglePatternShift={togglePatternShift}
           isEditingPattern={editingPattern}
-          setEditingPattern={setEditingPattern}
+          onToggleEditingPattern={() => setEditingPattern((prev) => !prev)}
         />
       </Affix>
 
