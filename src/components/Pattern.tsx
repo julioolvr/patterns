@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { Affix } from "@mantine/core";
 import classNames from "classnames";
 import { observer } from "mobx-react-lite";
@@ -71,6 +71,10 @@ function PatternUi({
     1000
   );
 
+  // TODO: Replace by last image change date
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const cacheBuster = useMemo(() => Math.random(), [imageOverlay]);
+
   return (
     <TransformComponent>
       <div
@@ -101,7 +105,7 @@ function PatternUi({
               <TransformComponent wrapperClass="pattern__image-overlay-transform-wrapper">
                 <img
                   className="pattern__image-overlay"
-                  src={imageOverlay}
+                  src={`${imageOverlay}?cache=${cacheBuster}`}
                   style={{ opacity: imageOverlayOpacity }}
                 />
               </TransformComponent>
