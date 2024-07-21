@@ -30,6 +30,7 @@ export default function Toolbox({
   onTogglePatternShift,
   isEditingPattern,
   onToggleEditingPattern,
+  onImageUpload,
 }: Props) {
   return (
     <ActionIcon.Group bg="white">
@@ -47,7 +48,8 @@ export default function Toolbox({
         onSelect={(file) => {
           client.storage
             .from("references")
-            .upload(pattern.id, file, { upsert: true });
+            .upload(pattern.id, file, { upsert: true })
+            .then(() => onImageUpload());
         }}
       />
 
@@ -91,6 +93,7 @@ type Props = {
   onChangeImageOpacity: (newOpacity: number) => void;
   isEditingPattern: boolean;
   onToggleEditingPattern: () => void;
+  onImageUpload: () => void;
 };
 
 function ImageSelector({ onSelect }: ImageSelectorProps) {

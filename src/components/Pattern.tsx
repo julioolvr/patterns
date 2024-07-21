@@ -13,6 +13,7 @@ import useStore from "../store";
 import { Pattern as PatternType } from "../modules/pattern";
 import { useDebouncedCallback } from "@mantine/hooks";
 import Toolbox from "./Toolbox";
+import useSequence from "../hooks/useSequence";
 
 type ColorGrid = Array<
   Array<{
@@ -59,6 +60,7 @@ function PatternUi({
   onPaint,
   isShifted,
   imageOverlay,
+  imageOverlayVersion,
   imageOverlayOpacity,
   imageOverlayScale,
   imageOverlayPositionX,
@@ -72,8 +74,11 @@ function PatternUi({
   );
 
   // TODO: Replace by last image change date
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  const cacheBuster = useMemo(() => Math.random(), [imageOverlay]);
+  const cacheBuster = useMemo(
+    () => Math.random(),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [imageOverlay, imageOverlayVersion]
+  );
 
   return (
     <TransformComponent>
@@ -168,6 +173,7 @@ type PatternUiProps = {
     positionY: number
   ) => void;
   allowTransformImageOverlay: boolean;
+  imageOverlayVersion: number;
 };
 
 const Pattern = observer(({ pattern }: Props) => {
@@ -177,6 +183,7 @@ const Pattern = observer(({ pattern }: Props) => {
 
   const [currentColorIndex, setCurrentColorIndex] = useState(0);
   const [imageOpacity, setImageOpacity] = useState(0.5);
+  const [imageOverlayVersion, bumpImageOverlayVersion] = useSequence();
 
   return (
     <TransformWrapper
@@ -197,6 +204,7 @@ const Pattern = observer(({ pattern }: Props) => {
           onTogglePatternShift={togglePatternShift}
           isEditingPattern={editingPattern}
           onToggleEditingPattern={() => setEditingPattern((prev) => !prev)}
+          onImageUpload={bumpImageOverlayVersion}
         />
       </Affix>
 
@@ -217,6 +225,7 @@ const Pattern = observer(({ pattern }: Props) => {
         onPaint={(x, y) => pattern.setPixelColor(currentColorIndex, x, y)}
         isShifted={ui.isPatternShifted}
         imageOverlay={pattern.imageUrl}
+        imageOverlayVersion={imageOverlayVersion}
         imageOverlayScale={pattern.imageOverlayScale}
         imageOverlayPositionX={pattern.imageOverlayPositionX}
         imageOverlayPositionY={pattern.imageOverlayPositionY}
