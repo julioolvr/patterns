@@ -1,8 +1,9 @@
+import { useState } from "react";
 import { TldrawUiButton, TldrawUiButtonIcon, useEditor } from "tldraw";
 import classNames from "classnames";
 
 import { PatternShape } from "./PatternShape";
-import { useState } from "react";
+import NewColorButton from "./PaletteStylePanelTool/NewColorButton";
 
 export default function PaletteStylePanelTool() {
   const editor = useEditor();
@@ -10,6 +11,11 @@ export default function PaletteStylePanelTool() {
   // patterns that might have different palettes
   const [selectedColorIndex, setSelectedColorIndex] = useState(0);
   const selectedShape = editor.getOnlySelectedShape();
+
+  // Not sure why updating the selected shape does not trigger a rerender
+  // of this component and I don't have internet to investigate further -
+  // this does the trick.
+  const [, setForceRefreshCounter] = useState(0);
 
   if (
     !selectedShape ||
@@ -38,6 +44,19 @@ export default function PaletteStylePanelTool() {
           <TldrawUiButtonIcon icon="color" />
         </TldrawUiButton>
       ))}
+
+      <NewColorButton
+        onNewColorSelected={(newColor) => {
+          editor.updateShape<PatternShape>({
+            id: selectedShape.id,
+            type: "pattern",
+            props: {
+              palette: [...selectedShape.props.palette, newColor],
+            },
+          });
+          setForceRefreshCounter((n) => n + 1);
+        }}
+      />
     </div>
   );
 }
