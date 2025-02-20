@@ -43,6 +43,10 @@ export class PatternShapeUtil extends BaseBoxShapeUtil<PatternShape> {
     };
   }
 
+  isAspectRatioLocked(): boolean {
+    return true;
+  }
+
   component(shape: PatternShape) {
     const isEditing = this.editor.getEditingShapeId() == shape.id;
 
