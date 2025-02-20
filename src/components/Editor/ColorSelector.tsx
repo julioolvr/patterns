@@ -1,7 +1,11 @@
 import { useState } from "react";
 
-export default function ColorSelector({ onColorSelected, onCancel }: Props) {
-  const [newColor, setNewColor] = useState("#000000");
+export default function ColorSelector({
+  value,
+  onColorSelected,
+  onCancel,
+}: Props) {
+  const [newColor, setNewColor] = useState(value ?? "#000000");
 
   // TODO: Position w/ Popper
   return (
@@ -32,6 +36,7 @@ export default function ColorSelector({ onColorSelected, onCancel }: Props) {
 }
 
 type Props = {
+  value?: string;
   onColorSelected(color: string): void;
   onCancel(): void;
 };

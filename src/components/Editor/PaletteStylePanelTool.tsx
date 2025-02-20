@@ -4,6 +4,9 @@ import classNames from "classnames";
 
 import { PatternShape } from "./PatternShape";
 import NewColorButton from "./PaletteStylePanelTool/NewColorButton";
+import { createPortal } from "react-dom";
+import ColorSelector from "./ColorSelector";
+import { produce } from "immer";
 
 export default function PaletteStylePanelTool() {
   const editor = useEditor();
@@ -11,6 +14,9 @@ export default function PaletteStylePanelTool() {
   // this component does not rerender and therefore the last pattern's
   // palette is shown.
   const selectedShape = editor.getOnlySelectedShape();
+  const [editingColorIndex, setEditingColorIndex] = useState<number | null>(
+    null
+  );
 
   // Not sure why updating the selected shape does not trigger a rerender
   // of this component and I don't have internet to investigate further -
@@ -46,10 +52,32 @@ export default function PaletteStylePanelTool() {
             });
             setForceRefreshCounter((n) => n + 1);
           }}
+          onDoubleClick={() => setEditingColorIndex(i)}
         >
           <TldrawUiButtonIcon icon="color" />
         </TldrawUiButton>
       ))}
+
+      {editingColorIndex !== null &&
+        createPortal(
+          <ColorSelector
+            value={selectedShape.props.palette[selectedColorIndex]}
+            onColorSelected={(newColor) => {
+              editor.updateShape<PatternShape>({
+                id: selectedShape.id,
+                type: "pattern",
+                props: {
+                  palette: produce(selectedShape.props.palette, (palette) => {
+                    palette[selectedColorIndex] = newColor;
+                  }),
+                },
+              });
+              setEditingColorIndex(null);
+            }}
+            onCancel={() => setEditingColorIndex(null)}
+          />,
+          document.body
+        )}
 
       <NewColorButton
         onNewColorSelected={(newColor) => {
