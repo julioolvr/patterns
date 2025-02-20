@@ -6,8 +6,21 @@
 
 .pattern__row {
   display: flex;
+  position: relative;
   width: 100%;
   flex: 1;
+}
+
+.pattern__row-counter {
+  position: absolute;
+  display: inline-flex;
+  height: 100%;
+  align-items: center;
+  justify-content: end;
+  font-size: 6px;
+  left: -6.5em;
+  text-align: right;
+  width: 5em;
 }
 
 .pattern__cell {
