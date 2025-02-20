@@ -144,6 +144,9 @@ const PatternContextToolbar = track(() => {
                 props: {
                   colors: selectedShape.props.colors.map((row) => [...row, 0]),
                   columns: selectedShape.props.columns + 1,
+                  w:
+                    (selectedShape.props.w / selectedShape.props.columns) *
+                    (selectedShape.props.columns + 1),
                 },
               })
             }
@@ -169,6 +172,9 @@ const PatternContextToolbar = track(() => {
                     row.slice(0, -1)
                   ),
                   columns: selectedShape.props.columns - 1,
+                  w:
+                    (selectedShape.props.w / selectedShape.props.columns) *
+                    (selectedShape.props.columns - 1),
                 },
               })
             }
@@ -221,6 +227,9 @@ const PatternContextToolbar = track(() => {
                 props: {
                   colors: selectedShape.props.colors.slice(0, -1),
                   rows: selectedShape.props.rows - 1,
+                  h:
+                    (selectedShape.props.h / selectedShape.props.rows) *
+                    (selectedShape.props.rows - 1),
                 },
               })
             }
@@ -247,6 +256,9 @@ const PatternContextToolbar = track(() => {
                     times(selectedShape.props.columns, () => 0),
                   ],
                   rows: selectedShape.props.rows + 1,
+                  h:
+                    (selectedShape.props.h / selectedShape.props.rows) *
+                    (selectedShape.props.rows + 1),
                 },
               })
             }
