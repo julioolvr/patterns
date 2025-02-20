@@ -80,7 +80,13 @@ const PatternContextToolbar = track(() => {
             width: 32,
             cursor: "pointer",
           }}
-          onClick={() => downloadExcel(selectedShape.props.colors)}
+          onClick={() =>
+            downloadExcel(
+              selectedShape.props.colors.map((row) =>
+                row.map((cell) => selectedShape.props.palette[cell])
+              )
+            )
+          }
         >
           <TldrawUiIcon icon="geo-arrow-down" />
         </div>
