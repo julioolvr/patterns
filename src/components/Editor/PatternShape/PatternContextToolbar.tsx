@@ -54,8 +54,18 @@ const PatternContextToolbar = track(() => {
             justifyContent: "center",
             height: 32,
             width: 32,
+            cursor: "pointer",
+            background: selectedShape.props.isShifted
+              ? "var(--color-muted-2)"
+              : "transparent",
           }}
-          onClick={() => console.log("clicked toggle shift")}
+          onClick={() =>
+            editor.updateShape<PatternShape>({
+              id: selectedShape.id,
+              type: "pattern",
+              props: { isShifted: !selectedShape.props.isShifted },
+            })
+          }
         >
           <TldrawUiIcon icon="horizontal-align-middle" />
         </div>
