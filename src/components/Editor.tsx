@@ -3,6 +3,7 @@ import "tldraw/tldraw.css";
 
 import { PatternShapeUtil } from "./Editor/PatternShape";
 import StylePanel from "./Editor/StylePanel";
+import PaintingTool from "./Editor/PaintingTool";
 
 export default function App() {
   return (
@@ -15,6 +16,7 @@ export default function App() {
         onMount={(editor) => {
           editor.createShapes([{ type: "pattern" }]);
         }}
+        tools={[PaintingTool]}
       />
     </div>
   );

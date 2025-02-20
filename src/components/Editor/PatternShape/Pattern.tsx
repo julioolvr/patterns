@@ -2,7 +2,12 @@ import { times } from "remeda";
 
 import "./Pattern.css";
 
-export default function Pattern({ rows, columns, colors }: Props) {
+export default function Pattern({
+  rows,
+  columns,
+  colors,
+  onCellClicked,
+}: Props) {
   // TODO: Collapse borders
   return (
     <div className="pattern">
@@ -15,6 +20,7 @@ export default function Pattern({ rows, columns, colors }: Props) {
               style={{ backgroundColor: colors[y]?.[x] ?? "white" }}
               onClick={(e) => {
                 console.log("click cell", x, y, e);
+                onCellClicked(x, y);
                 e.stopPropagation();
               }}
               onPointerDown={(e) => e.stopPropagation()}
@@ -32,4 +38,5 @@ type Props = {
   rows: number;
   columns: number;
   colors: string[][];
+  onCellClicked: (x: number, y: number) => void;
 };
