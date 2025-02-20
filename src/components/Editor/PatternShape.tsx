@@ -20,6 +20,10 @@ export type PatternShape = TLBaseShape<
 export class PatternShapeUtil extends BaseBoxShapeUtil<PatternShape> {
   static override type = "pattern" as const;
 
+  canEdit(): boolean {
+    return true;
+  }
+
   getDefaultProps(): PatternShape["props"] {
     return {
       rows: 40,
@@ -33,8 +37,10 @@ export class PatternShapeUtil extends BaseBoxShapeUtil<PatternShape> {
   }
 
   component(shape: PatternShape) {
+    const isEditing = this.editor.getEditingShapeId() == shape.id;
+
     return (
-      <HTMLContainer>
+      <HTMLContainer style={{ pointerEvents: isEditing ? "all" : "none" }}>
         <Pattern
           rows={shape.props.rows}
           columns={shape.props.columns}

@@ -13,6 +13,13 @@ export default function Pattern({ rows, columns, colors }: Props) {
               key={x}
               className="pattern__cell"
               style={{ backgroundColor: colors[y]?.[x] ?? "white" }}
+              onClick={(e) => {
+                console.log("click cell", x, y, e);
+                e.stopPropagation();
+              }}
+              onPointerDown={(e) => e.stopPropagation()}
+              onTouchStart={(e) => e.stopPropagation()}
+              onTouchEnd={(e) => e.stopPropagation()}
             ></div>
           ))}
         </div>
