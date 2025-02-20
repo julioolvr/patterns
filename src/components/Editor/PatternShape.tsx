@@ -60,6 +60,7 @@ export class PatternShapeUtil extends BaseBoxShapeUtil<PatternShape> {
           )}
           isShifted={shape.props.isShifted}
           onCellClicked={(x, y) => {
+            this.editor.markHistoryStoppingPoint();
             this.editor.updateShape<PatternShape>({
               id: shape.id,
               type: shape.type,

@@ -137,7 +137,8 @@ const PatternContextToolbar = track(() => {
               width: 32,
               cursor: "pointer",
             }}
-            onClick={() =>
+            onClick={() => {
+              editor.markHistoryStoppingPoint();
               editor.updateShape<PatternShape>({
                 id: selectedShape.id,
                 type: "pattern",
@@ -148,8 +149,8 @@ const PatternContextToolbar = track(() => {
                     (selectedShape.props.w / selectedShape.props.columns) *
                     (selectedShape.props.columns + 1),
                 },
-              })
-            }
+              });
+            }}
           >
             <TldrawUiIcon icon="plus" />
           </div>
@@ -163,7 +164,8 @@ const PatternContextToolbar = track(() => {
               width: 32,
               cursor: "pointer",
             }}
-            onClick={() =>
+            onClick={() => {
+              editor.markHistoryStoppingPoint();
               editor.updateShape<PatternShape>({
                 id: selectedShape.id,
                 type: "pattern",
@@ -176,8 +178,8 @@ const PatternContextToolbar = track(() => {
                     (selectedShape.props.w / selectedShape.props.columns) *
                     (selectedShape.props.columns - 1),
                 },
-              })
-            }
+              });
+            }}
           >
             <TldrawUiIcon icon="minus" />
           </div>
@@ -220,7 +222,8 @@ const PatternContextToolbar = track(() => {
               width: 32,
               cursor: "pointer",
             }}
-            onClick={() =>
+            onClick={() => {
+              editor.markHistoryStoppingPoint();
               editor.updateShape<PatternShape>({
                 id: selectedShape.id,
                 type: "pattern",
@@ -231,8 +234,8 @@ const PatternContextToolbar = track(() => {
                     (selectedShape.props.h / selectedShape.props.rows) *
                     (selectedShape.props.rows - 1),
                 },
-              })
-            }
+              });
+            }}
           >
             <TldrawUiIcon icon="minus" />
           </div>
@@ -246,7 +249,8 @@ const PatternContextToolbar = track(() => {
               width: 32,
               cursor: "pointer",
             }}
-            onClick={() =>
+            onClick={() => {
+              editor.markHistoryStoppingPoint();
               editor.updateShape<PatternShape>({
                 id: selectedShape.id,
                 type: "pattern",
@@ -260,8 +264,8 @@ const PatternContextToolbar = track(() => {
                     (selectedShape.props.h / selectedShape.props.rows) *
                     (selectedShape.props.rows + 1),
                 },
-              })
-            }
+              });
+            }}
           >
             <TldrawUiIcon icon="plus" />
           </div>

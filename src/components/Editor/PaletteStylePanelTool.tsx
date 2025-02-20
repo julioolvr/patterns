@@ -72,6 +72,7 @@ export default function PaletteStylePanelTool() {
           <ColorSelector
             value={selectedShape.props.palette[selectedColorIndex]}
             onColorSelected={(newColor) => {
+              editor.markHistoryStoppingPoint();
               editor.updateShape<PatternShape>({
                 id: selectedShape.id,
                 type: "pattern",
@@ -90,6 +91,7 @@ export default function PaletteStylePanelTool() {
 
       <NewColorButton
         onNewColorSelected={(newColor) => {
+          editor.markHistoryStoppingPoint();
           editor.updateShape<PatternShape>({
             id: selectedShape.id,
             type: "pattern",
