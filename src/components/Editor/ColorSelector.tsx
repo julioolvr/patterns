@@ -8,12 +8,14 @@ export default function ColorSelector({ onColorSelected, onCancel }: Props) {
     <div
       style={{
         position: "absolute",
-        right: 0,
+        top: 20,
+        right: 20,
         borderRadius: 8,
         zIndex: 100,
         display: "flex",
         boxShadow: "0 0 0 1px rgba(0,0,0,0.1), 0 4px 8px rgba(0,0,0,0.1)",
-        background: "var(--color-panel)",
+        padding: 20,
+        background: "white",
         width: "fit-content",
         alignItems: "center",
       }}
