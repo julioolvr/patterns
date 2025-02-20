@@ -7,6 +7,7 @@ import {
   usePassThroughWheelEvents,
   useRelevantStyles,
 } from "tldraw";
+import PaletteStylePanelTool from "./PaletteStylePanelTool";
 
 // Copy-paste of the default style panel from tldraw, to be able to add tools
 // that don't refer to `StyleProp`s.
@@ -38,7 +39,8 @@ export default function StylePanel({
       data-ismobile={isMobile}
       onPointerLeave={handlePointerOut}
     >
-      Custom style panel{content}
+      <PaletteStylePanelTool />
+      {content}
     </div>
   );
 }

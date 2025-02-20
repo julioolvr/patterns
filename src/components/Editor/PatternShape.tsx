@@ -3,7 +3,7 @@ import { BaseBoxShapeUtil, HTMLContainer, TLBaseShape } from "tldraw";
 // Shapes are a JSON record with properties
 // Probably the pattern shape should have width, height, colors and wether it's shifted or not
 // Maybe it should also contain the palette?
-type PatternShape = TLBaseShape<
+export type PatternShape = TLBaseShape<
   "pattern",
   {
     rows: number;
