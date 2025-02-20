@@ -38,8 +38,8 @@ export class PatternShapeUtil extends BaseBoxShapeUtil<PatternShape> {
       palette: ["#e2e2e2", "red", "blue", "green"],
       selectedColor: 0,
       isShifted: true,
-      h: 500,
-      w: 250,
+      h: 720,
+      w: 240,
     };
   }
 
