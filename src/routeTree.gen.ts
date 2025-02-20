@@ -13,6 +13,7 @@ import { createFileRoute } from '@tanstack/react-router'
 // Import Routes
 
 import { Route as rootRoute } from './routes/__root'
+import { Route as TldrawImport } from './routes/tldraw'
 import { Route as IndexImport } from './routes/index'
 import { Route as PPatternIdImport } from './routes/p/$patternId'
 
@@ -26,6 +27,11 @@ const AboutLazyRoute = AboutLazyImport.update({
   path: '/about',
   getParentRoute: () => rootRoute,
 } as any).lazy(() => import('./routes/about.lazy').then((d) => d.Route))
+
+const TldrawRoute = TldrawImport.update({
+  path: '/tldraw',
+  getParentRoute: () => rootRoute,
+} as any)
 
 const IndexRoute = IndexImport.update({
   path: '/',
@@ -46,6 +52,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexImport
+      parentRoute: typeof rootRoute
+    }
+    '/tldraw': {
+      id: '/tldraw'
+      path: '/tldraw'
+      fullPath: '/tldraw'
+      preLoaderRoute: typeof TldrawImport
       parentRoute: typeof rootRoute
     }
     '/about': {
@@ -69,6 +82,7 @@ declare module '@tanstack/react-router' {
 
 export const routeTree = rootRoute.addChildren({
   IndexRoute,
+  TldrawRoute,
   AboutLazyRoute,
   PPatternIdRoute,
 })
@@ -82,12 +96,16 @@ export const routeTree = rootRoute.addChildren({
       "filePath": "__root.tsx",
       "children": [
         "/",
+        "/tldraw",
         "/about",
         "/p/$patternId"
       ]
     },
     "/": {
       "filePath": "index.tsx"
+    },
+    "/tldraw": {
+      "filePath": "tldraw.tsx"
     },
     "/about": {
       "filePath": "about.lazy.tsx"
