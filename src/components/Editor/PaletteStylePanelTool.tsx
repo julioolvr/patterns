@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { TldrawUiButton, TldrawUiButtonIcon, useEditor } from "tldraw";
 import classNames from "classnames";
 
@@ -22,6 +22,15 @@ export default function PaletteStylePanelTool() {
   // of this component and I don't have internet to investigate further -
   // this does the trick.
   const [, setForceRefreshCounter] = useState(0);
+
+  useEffect(() => {
+    if (
+      !selectedShape ||
+      !editor.isShapeOfType<PatternShape>(selectedShape, "pattern")
+    ) {
+      setEditingColorIndex(null);
+    }
+  }, [editor, selectedShape]);
 
   if (
     !selectedShape ||
