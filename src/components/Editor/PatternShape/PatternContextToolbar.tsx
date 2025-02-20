@@ -1,6 +1,7 @@
 import { TldrawUiIcon, track, useEditor } from "tldraw";
 
 import { PatternShape } from "../PatternShape";
+import { downloadExcel } from "../export";
 
 const PatternContextToolbar = track(() => {
   const editor = useEditor();
@@ -77,8 +78,9 @@ const PatternContextToolbar = track(() => {
             justifyContent: "center",
             height: 32,
             width: 32,
+            cursor: "pointer",
           }}
-          onClick={() => console.log("clicked download")}
+          onClick={() => downloadExcel(selectedShape.props.colors)}
         >
           <TldrawUiIcon icon="geo-arrow-down" />
         </div>
