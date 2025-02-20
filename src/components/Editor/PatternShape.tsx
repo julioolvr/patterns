@@ -10,6 +10,7 @@ export type PatternShape = TLBaseShape<
     columns: number;
     shifted: boolean;
     colors: string[][];
+    palette: string[];
     h: number;
     w: number;
   }
@@ -24,6 +25,7 @@ export class PatternShapeUtil extends BaseBoxShapeUtil<PatternShape> {
       columns: 20,
       shifted: false,
       colors: [],
+      palette: ["red", "blue", "green"],
       h: 500,
       w: 250,
     };

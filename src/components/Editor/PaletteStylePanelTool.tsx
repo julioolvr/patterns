@@ -12,5 +12,11 @@ export default function PaletteStylePanelTool() {
     return;
   }
 
-  return <div>Pattern is selected</div>;
+  return (
+    <ul>
+      {selectedShape.props.palette.map((color) => (
+        <li>{color}</li>
+      ))}
+    </ul>
+  );
 }
