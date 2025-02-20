@@ -7,12 +7,9 @@ import NewColorButton from "./PaletteStylePanelTool/NewColorButton";
 
 export default function PaletteStylePanelTool() {
   const editor = useEditor();
-  // TODO: Consider that state will persist when selecting different
-  // patterns that might have different palettes
   // TODO: When going back and forth between two selected patterns,
   // this component does not rerender and therefore the last pattern's
   // palette is shown.
-  const [selectedColorIndex, setSelectedColorIndex] = useState(0);
   const selectedShape = editor.getOnlySelectedShape();
 
   // Not sure why updating the selected shape does not trigger a rerender
@@ -27,6 +24,8 @@ export default function PaletteStylePanelTool() {
     return;
   }
 
+  const selectedColorIndex = selectedShape.props.selectedColor;
+
   return (
     <div className={classNames("tlui-buttons__grid")}>
       {selectedShape.props.palette.map((color, i) => (
@@ -39,10 +38,14 @@ export default function PaletteStylePanelTool() {
           title={color}
           className={classNames("tlui-button-grid__button")}
           style={{ color }}
-          onPointerEnter={(e) => console.log({ e })}
-          onPointerDown={(e) => console.log({ e })}
-          onPointerUp={(e) => console.log({ e })}
-          onClick={() => setSelectedColorIndex(i)}
+          onClick={() => {
+            editor.updateShape<PatternShape>({
+              id: selectedShape.id,
+              type: "pattern",
+              props: { selectedColor: i },
+            });
+            setForceRefreshCounter((n) => n + 1);
+          }}
         >
           <TldrawUiButtonIcon icon="color" />
         </TldrawUiButton>

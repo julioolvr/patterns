@@ -15,6 +15,7 @@ export type PatternShape = TLBaseShape<
     shifted: boolean;
     colors: string[][];
     palette: string[];
+    selectedColor: number;
     h: number;
     w: number;
   }
@@ -32,8 +33,9 @@ export class PatternShapeUtil extends BaseBoxShapeUtil<PatternShape> {
       rows: 40,
       columns: 20,
       shifted: false,
-      colors: times(20, () => times(40, () => "white")),
+      colors: times(40, () => times(20, () => "white")),
       palette: ["red", "blue", "green"],
+      selectedColor: 0,
       h: 500,
       w: 250,
     };
@@ -48,7 +50,7 @@ export class PatternShapeUtil extends BaseBoxShapeUtil<PatternShape> {
           rows={shape.props.rows}
           columns={shape.props.columns}
           colors={shape.props.colors}
-          onCellClicked={(x, y) =>
+          onCellClicked={(x, y) => {
             this.editor.updateShape<PatternShape>({
               id: shape.id,
               type: shape.type,
@@ -58,11 +60,11 @@ export class PatternShapeUtil extends BaseBoxShapeUtil<PatternShape> {
                     colors[y] = [];
                   }
 
-                  colors[y][x] = "pink";
+                  colors[y][x] = shape.props.palette[shape.props.selectedColor];
                 }),
               },
-            })
-          }
+            });
+          }}
         />
       </HTMLContainer>
     );

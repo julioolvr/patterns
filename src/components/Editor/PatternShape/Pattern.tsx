@@ -19,7 +19,6 @@ export default function Pattern({
               className="pattern__cell"
               style={{ backgroundColor: colors[y]?.[x] ?? "white" }}
               onClick={(e) => {
-                console.log("click cell", x, y, e);
                 onCellClicked(x, y);
                 e.stopPropagation();
               }}
