@@ -2,6 +2,8 @@ import classNames from "classnames";
 import { times } from "remeda";
 
 import "./Pattern.css";
+import tinycolor from "tinycolor2";
+import foregroundColorForBackground from "../../../utils/foregroundColorForBackground";
 
 export default function Pattern({
   rows,
@@ -64,6 +66,9 @@ export default function Pattern({
                         display: "inline-flex",
                         alignItems: "center",
                         justifyContent: "center",
+                        color: `#${foregroundColorForBackground(
+                          tinycolor(colors[y]?.[x] ?? "white")
+                        ).toHex()}`,
                       }}
                     >
                       {currentColorCount}
