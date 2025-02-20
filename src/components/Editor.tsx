@@ -3,7 +3,6 @@ import "tldraw/tldraw.css";
 
 import { PatternShapeUtil } from "./Editor/PatternShape";
 import StylePanel from "./Editor/StylePanel";
-import PaintingTool from "./Editor/PaintingTool";
 import PatternContextToolbar from "./Editor/PatternShape/PatternContextToolbar";
 import Toolbar from "./Editor/Toolbar";
 
@@ -32,7 +31,6 @@ export default function App() {
             return tools;
           },
         }}
-        tools={[PaintingTool]}
       />
     </div>
   );
