@@ -12,7 +12,6 @@ import { Pattern as PatternType } from "../modules/pattern";
 import useStore from "../store";
 import useSequence from "../hooks/useSequence";
 
-import "./Pattern.css";
 import PaletteSelector from "./PaletteSelector";
 import Toolbox from "./Toolbox";
 

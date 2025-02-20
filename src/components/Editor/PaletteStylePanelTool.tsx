@@ -9,6 +9,9 @@ export default function PaletteStylePanelTool() {
   const editor = useEditor();
   // TODO: Consider that state will persist when selecting different
   // patterns that might have different palettes
+  // TODO: When going back and forth between two selected patterns,
+  // this component does not rerender and therefore the last pattern's
+  // palette is shown.
   const [selectedColorIndex, setSelectedColorIndex] = useState(0);
   const selectedShape = editor.getOnlySelectedShape();
 

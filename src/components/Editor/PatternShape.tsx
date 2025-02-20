@@ -1,4 +1,5 @@
 import { BaseBoxShapeUtil, HTMLContainer, TLBaseShape } from "tldraw";
+import Pattern from "./PatternShape/Pattern";
 
 // Shapes are a JSON record with properties
 // Probably the pattern shape should have width, height, colors and wether it's shifted or not
@@ -24,7 +25,7 @@ export class PatternShapeUtil extends BaseBoxShapeUtil<PatternShape> {
       rows: 40,
       columns: 20,
       shifted: false,
-      colors: [],
+      colors: [["blue", "red", "green"]],
       palette: ["red", "blue", "green"],
       h: 500,
       w: 250,
@@ -34,7 +35,11 @@ export class PatternShapeUtil extends BaseBoxShapeUtil<PatternShape> {
   component(shape: PatternShape) {
     return (
       <HTMLContainer>
-        Hello {shape.props.rows} {shape.props.columns}
+        <Pattern
+          rows={shape.props.rows}
+          columns={shape.props.columns}
+          colors={shape.props.colors}
+        />
       </HTMLContainer>
     );
   }
