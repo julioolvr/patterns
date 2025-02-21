@@ -101,15 +101,12 @@ const PatternContextToolbar = track(() => {
         style={{
           position: "absolute",
           pointerEvents: "all",
-          top:
-            pageCoordinates.y +
-            (selectionRotatedPageBounds.height * editor.getZoomLevel()) / 2 -
-            32,
+          top: pageCoordinates.y,
           left:
             pageCoordinates.x +
-            (selectionRotatedPageBounds.width * editor.getZoomLevel()) / 2 +
-            42,
-          width: selectionRotatedPageBounds.width * editor.getZoomLevel(),
+            selectionRotatedPageBounds.width * editor.getZoomLevel() +
+            20,
+          height: selectionRotatedPageBounds.height * editor.getZoomLevel(),
           display: "flex",
           flexDirection: "column",
           justifyContent: "center",
