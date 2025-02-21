@@ -166,19 +166,24 @@ const PatternContextToolbar = track(() => {
             }}
             onClick={() => {
               editor.markHistoryStoppingPoint();
-              editor.updateShape<PatternShape>({
-                id: selectedShape.id,
-                type: "pattern",
-                props: {
-                  colors: selectedShape.props.colors.map((row) =>
-                    row.slice(0, -1)
-                  ),
-                  columns: selectedShape.props.columns - 1,
-                  w:
-                    (selectedShape.props.w / selectedShape.props.columns) *
-                    (selectedShape.props.columns - 1),
-                },
-              });
+
+              if (selectedShape.props.columns > 1) {
+                editor.updateShape<PatternShape>({
+                  id: selectedShape.id,
+                  type: "pattern",
+                  props: {
+                    colors: selectedShape.props.colors.map((row) =>
+                      row.slice(0, -1)
+                    ),
+                    columns: selectedShape.props.columns - 1,
+                    w:
+                      (selectedShape.props.w / selectedShape.props.columns) *
+                      (selectedShape.props.columns - 1),
+                  },
+                });
+              } else {
+                editor.deleteShape(selectedShape.id);
+              }
             }}
           >
             <TldrawUiIcon icon="minus" />
@@ -224,17 +229,22 @@ const PatternContextToolbar = track(() => {
             }}
             onClick={() => {
               editor.markHistoryStoppingPoint();
-              editor.updateShape<PatternShape>({
-                id: selectedShape.id,
-                type: "pattern",
-                props: {
-                  colors: selectedShape.props.colors.slice(0, -1),
-                  rows: selectedShape.props.rows - 1,
-                  h:
-                    (selectedShape.props.h / selectedShape.props.rows) *
-                    (selectedShape.props.rows - 1),
-                },
-              });
+
+              if (selectedShape.props.rows > 1) {
+                editor.updateShape<PatternShape>({
+                  id: selectedShape.id,
+                  type: "pattern",
+                  props: {
+                    colors: selectedShape.props.colors.slice(0, -1),
+                    rows: selectedShape.props.rows - 1,
+                    h:
+                      (selectedShape.props.h / selectedShape.props.rows) *
+                      (selectedShape.props.rows - 1),
+                  },
+                });
+              } else {
+                editor.deleteShape(selectedShape.id);
+              }
             }}
           >
             <TldrawUiIcon icon="minus" />
