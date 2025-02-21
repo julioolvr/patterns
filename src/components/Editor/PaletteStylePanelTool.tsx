@@ -7,7 +7,7 @@ import NewColorButton from "./PaletteStylePanelTool/NewColorButton";
 import { createPortal } from "react-dom";
 import ColorSelector from "./ColorSelector";
 import { produce } from "immer";
-import useSequence from "../../hooks/useSequence";
+import useSequence from "@/hooks/useSequence";
 
 export default function PaletteStylePanelTool() {
   const editor = useEditor();
