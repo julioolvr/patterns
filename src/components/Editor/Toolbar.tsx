@@ -25,17 +25,18 @@ import {
   SelectToolbarItem,
   StarToolbarItem,
   TextToolbarItem,
+  ToolbarItem,
   TriangleToolbarItem,
   XBoxToolbarItem,
 } from "tldraw";
-
-import AddPatternItem from "./Toolbar/AddPatternItem";
 
 export default function Toolbar() {
   return (
     <DefaultToolbar>
       <SelectToolbarItem />
-      <AddPatternItem />
+
+      <ToolbarItem tool="add-pattern" />
+
       <HandToolbarItem />
       <DrawToolbarItem />
       <EraserToolbarItem />

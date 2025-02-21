@@ -9,8 +9,12 @@ import {
   useEditor,
 } from "tldraw";
 
-import ColorSelector from "./ColorSelector";
-import { PaletteStyle, paletteStyle } from "./PaletteStyle";
+import {
+  PaletteStyle,
+  paletteStyle,
+} from "@/components/Editor/__shared__/PaletteStyle";
+import ColorSelector from "@/components/Editor/StylePanel/__shared__/ColorSelector";
+
 import NewColorButton from "./PaletteStylePanelTool/NewColorButton";
 
 export default function PaletteStylePanelTool({ palette }: Props) {

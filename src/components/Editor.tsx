@@ -2,8 +2,8 @@ import "tldraw/tldraw.css";
 
 import { Tldraw } from "tldraw";
 
+import PatternContextToolbar from "./Editor/PatternContextToolbar";
 import { PatternShapeUtil } from "./Editor/PatternShape";
-import PatternContextToolbar from "./Editor/PatternShape/PatternContextToolbar";
 import StylePanel from "./Editor/StylePanel";
 import Toolbar from "./Editor/Toolbar";
 

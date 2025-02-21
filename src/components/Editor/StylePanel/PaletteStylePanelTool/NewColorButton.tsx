@@ -3,7 +3,7 @@ import { useState } from "react";
 import { createPortal } from "react-dom";
 import { TldrawUiButton, TldrawUiButtonIcon } from "tldraw";
 
-import ColorSelector from "@/components/Editor/ColorSelector";
+import ColorSelector from "@/components/Editor/StylePanel/__shared__/ColorSelector";
 
 export default function NewColorButton({ onNewColorSelected }: Props) {
   const [showSelector, setShowSelector] = useState(false);

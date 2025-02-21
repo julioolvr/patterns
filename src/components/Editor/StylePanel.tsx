@@ -4,8 +4,9 @@ import {
   useRelevantStyles,
 } from "tldraw";
 
-import { paletteStyle } from "./PaletteStyle";
-import PaletteStylePanelTool from "./PaletteStylePanelTool";
+import { paletteStyle } from "@/components/Editor/__shared__/PaletteStyle";
+
+import PaletteStylePanelTool from "./StylePanel/PaletteStylePanelTool";
 
 export default function StylePanel() {
   const styles = useRelevantStyles();

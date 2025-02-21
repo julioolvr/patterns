@@ -2,7 +2,7 @@ import ExcelJS from "exceljs";
 import { saveAs } from "file-saver";
 import tinycolor from "tinycolor2";
 
-import { coordinatesToExcel } from "@/modules/excel";
+import { coordinatesToExcel } from "@/utils/excel";
 import foregroundColorForBackground from "@/utils/foregroundColorForBackground";
 
 export async function downloadExcel(colors: Array<Array<string>>) {

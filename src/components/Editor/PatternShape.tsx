@@ -2,7 +2,7 @@ import { produce } from "immer";
 import { times } from "remeda";
 import { BaseBoxShapeUtil, HTMLContainer, T, TLBaseShape } from "tldraw";
 
-import { PaletteStyle, paletteStyle } from "./PaletteStyle";
+import { PaletteStyle, paletteStyle } from "./__shared__/PaletteStyle";
 import Pattern from "./PatternShape/Pattern";
 
 // Shapes are a JSON record with properties
