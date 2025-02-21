@@ -86,7 +86,7 @@ const PatternContextToolbar = track(() => {
             onClick={() =>
               downloadExcel(
                 selectedShape.props.colors.map((row) =>
-                  row.map((cell) => selectedShape.props.palette[cell])
+                  row.map((cell) => selectedShape.props.palette.colors[cell])
                 )
               )
             }

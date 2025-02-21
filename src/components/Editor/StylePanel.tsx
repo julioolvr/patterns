@@ -1,47 +1,22 @@
-import classNames from "classnames";
-import { useCallback, useRef } from "react";
 import {
+  DefaultStylePanel,
   DefaultStylePanelContent,
-  TLUiStylePanelProps,
-  useEditor,
-  usePassThroughWheelEvents,
   useRelevantStyles,
 } from "tldraw";
 
+import { paletteStyle } from "./PaletteStyle";
 import PaletteStylePanelTool from "./PaletteStylePanelTool";
 
-// Copy-paste of the default style panel from tldraw, to be able to add tools
-// that don't refer to `StyleProp`s.
-export default function StylePanel({
-  isMobile,
-  children,
-}: TLUiStylePanelProps) {
-  const editor = useEditor();
-
-  const ref = useRef<HTMLDivElement>(null);
-  usePassThroughWheelEvents(ref);
-
+export default function StylePanel() {
   const styles = useRelevantStyles();
+  if (!styles) return null;
 
-  const handlePointerOut = useCallback(() => {
-    if (!isMobile) {
-      editor.updateInstanceState({ isChangingStyle: false });
-    }
-  }, [editor, isMobile]);
-
-  const content = children ?? <DefaultStylePanelContent styles={styles} />;
+  const palette = styles.get(paletteStyle);
 
   return (
-    <div
-      ref={ref}
-      className={classNames("tlui-style-panel", {
-        "tlui-style-panel__wrapper": !isMobile,
-      })}
-      data-ismobile={isMobile}
-      onPointerLeave={handlePointerOut}
-    >
-      <PaletteStylePanelTool />
-      {content}
-    </div>
+    <DefaultStylePanel>
+      <DefaultStylePanelContent styles={styles} />
+      {palette !== undefined && <PaletteStylePanelTool palette={palette} />}
+    </DefaultStylePanel>
   );
 }
