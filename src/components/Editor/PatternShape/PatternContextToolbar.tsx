@@ -1,8 +1,8 @@
 import { times } from "remeda";
 import { TldrawUiIcon, track, useEditor } from "tldraw";
 
-import { downloadExcel } from "../export";
-import { PatternShape } from "../PatternShape";
+import { downloadExcel } from "@/components/Editor/export";
+import { PatternShape } from "@/components/Editor/PatternShape";
 
 const PatternContextToolbar = track(() => {
   const editor = useEditor();

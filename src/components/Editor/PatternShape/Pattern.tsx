@@ -4,7 +4,7 @@ import classNames from "classnames";
 import { times } from "remeda";
 import tinycolor from "tinycolor2";
 
-import foregroundColorForBackground from "../../../utils/foregroundColorForBackground";
+import foregroundColorForBackground from "@/utils/foregroundColorForBackground";
 
 export default function Pattern({
   rows,
