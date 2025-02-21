@@ -1,5 +1,5 @@
-import { useCallback, useRef } from "react";
 import classNames from "classnames";
+import { useCallback, useRef } from "react";
 import {
   DefaultStylePanelContent,
   TLUiStylePanelProps,
@@ -7,6 +7,7 @@ import {
   usePassThroughWheelEvents,
   useRelevantStyles,
 } from "tldraw";
+
 import PaletteStylePanelTool from "./PaletteStylePanelTool";
 
 // Copy-paste of the default style panel from tldraw, to be able to add tools

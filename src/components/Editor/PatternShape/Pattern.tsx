@@ -1,8 +1,9 @@
+import "./Pattern.css";
+
 import classNames from "classnames";
 import { times } from "remeda";
-
-import "./Pattern.css";
 import tinycolor from "tinycolor2";
+
 import foregroundColorForBackground from "../../../utils/foregroundColorForBackground";
 
 export default function Pattern({

@@ -2,8 +2,8 @@ import ExcelJS from "exceljs";
 import { saveAs } from "file-saver";
 import tinycolor from "tinycolor2";
 
-import foregroundColorForBackground from "../../utils/foregroundColorForBackground";
 import { coordinatesToExcel } from "../../modules/excel";
+import foregroundColorForBackground from "../../utils/foregroundColorForBackground";
 
 export async function downloadExcel(colors: Array<Array<string>>) {
   const workbook = new ExcelJS.Workbook();

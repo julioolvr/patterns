@@ -1,13 +1,14 @@
-import { useEffect, useState } from "react";
-import { TldrawUiButton, TldrawUiButtonIcon, useEditor } from "tldraw";
 import classNames from "classnames";
-
-import { PatternShape } from "./PatternShape";
-import NewColorButton from "./PaletteStylePanelTool/NewColorButton";
-import { createPortal } from "react-dom";
-import ColorSelector from "./ColorSelector";
 import { produce } from "immer";
+import { useEffect, useState } from "react";
+import { createPortal } from "react-dom";
+import { TldrawUiButton, TldrawUiButtonIcon, useEditor } from "tldraw";
+
 import useSequence from "@/hooks/useSequence";
+
+import ColorSelector from "./ColorSelector";
+import NewColorButton from "./PaletteStylePanelTool/NewColorButton";
+import { PatternShape } from "./PatternShape";
 
 export default function PaletteStylePanelTool() {
   const editor = useEditor();

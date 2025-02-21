@@ -1,9 +1,10 @@
-import { Tldraw } from "tldraw";
 import "tldraw/tldraw.css";
 
+import { Tldraw } from "tldraw";
+
 import { PatternShapeUtil } from "./Editor/PatternShape";
-import StylePanel from "./Editor/StylePanel";
 import PatternContextToolbar from "./Editor/PatternShape/PatternContextToolbar";
+import StylePanel from "./Editor/StylePanel";
 import Toolbar from "./Editor/Toolbar";
 
 export default function App() {

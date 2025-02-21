@@ -1,9 +1,9 @@
-import { RouterProvider, createRouter } from "@tanstack/react-router";
-import { Loader, MantineProvider } from "@mantine/core";
-
 import "@mantine/core/styles.css";
 import "@mantine/dropzone/styles.css";
 import "@mantine/spotlight/styles.css";
+
+import { Loader, MantineProvider } from "@mantine/core";
+import { createRouter,RouterProvider } from "@tanstack/react-router";
 
 import { routeTree } from "./routeTree.gen";
 

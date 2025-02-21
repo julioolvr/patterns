@@ -1,8 +1,8 @@
+import { produce } from "immer";
+import { times } from "remeda";
 import { BaseBoxShapeUtil, HTMLContainer, TLBaseShape } from "tldraw";
 
 import Pattern from "./PatternShape/Pattern";
-import { produce } from "immer";
-import { times } from "remeda";
 
 // Shapes are a JSON record with properties
 // Probably the pattern shape should have width, height, colors and wether it's shifted or not
