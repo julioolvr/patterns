@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <!-- Simple grid background -->
+  <path d="M11 6 L11 26" stroke="#C9CBC7" stroke-width="1"/>
+  <path d="M21 6 L21 26" stroke="#C9CBC7" stroke-width="1"/>
+  <path d="M6 11 L26 11" stroke="#C9CBC7" stroke-width="1"/>
+  <path d="M6 21 L26 21" stroke="#C9CBC7" stroke-width="1"/>
+
+  <!-- Crochet hook -->
+  <path
+    d="M24 8 L12 20 C10 22, 10 24, 12 26"
+    fill="none"
+    stroke="#EABB95"
+    stroke-width="3"
+    stroke-linecap="round"
+  />
+
+  <!-- Yarn/stitch -->
+  <circle cx="12" cy="20" r="4" fill="#F9DFCA"/>
+</svg>
