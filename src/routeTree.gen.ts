@@ -13,9 +13,7 @@ import { createFileRoute } from '@tanstack/react-router'
 // Import Routes
 
 import { Route as rootRoute } from './routes/__root'
-import { Route as TldrawImport } from './routes/tldraw'
 import { Route as IndexImport } from './routes/index'
-import { Route as PPatternIdImport } from './routes/p/$patternId'
 
 // Create Virtual Routes
 
@@ -28,18 +26,8 @@ const AboutLazyRoute = AboutLazyImport.update({
   getParentRoute: () => rootRoute,
 } as any).lazy(() => import('./routes/about.lazy').then((d) => d.Route))
 
-const TldrawRoute = TldrawImport.update({
-  path: '/tldraw',
-  getParentRoute: () => rootRoute,
-} as any)
-
 const IndexRoute = IndexImport.update({
   path: '/',
-  getParentRoute: () => rootRoute,
-} as any)
-
-const PPatternIdRoute = PPatternIdImport.update({
-  path: '/p/$patternId',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -54,13 +42,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexImport
       parentRoute: typeof rootRoute
     }
-    '/tldraw': {
-      id: '/tldraw'
-      path: '/tldraw'
-      fullPath: '/tldraw'
-      preLoaderRoute: typeof TldrawImport
-      parentRoute: typeof rootRoute
-    }
     '/about': {
       id: '/about'
       path: '/about'
@@ -68,24 +49,12 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AboutLazyImport
       parentRoute: typeof rootRoute
     }
-    '/p/$patternId': {
-      id: '/p/$patternId'
-      path: '/p/$patternId'
-      fullPath: '/p/$patternId'
-      preLoaderRoute: typeof PPatternIdImport
-      parentRoute: typeof rootRoute
-    }
   }
 }
 
 // Create and export the route tree
 
-export const routeTree = rootRoute.addChildren({
-  IndexRoute,
-  TldrawRoute,
-  AboutLazyRoute,
-  PPatternIdRoute,
-})
+export const routeTree = rootRoute.addChildren({ IndexRoute, AboutLazyRoute })
 
 /* prettier-ignore-end */
 
@@ -96,22 +65,14 @@ export const routeTree = rootRoute.addChildren({
       "filePath": "__root.tsx",
       "children": [
         "/",
-        "/tldraw",
-        "/about",
-        "/p/$patternId"
+        "/about"
       ]
     },
     "/": {
       "filePath": "index.tsx"
     },
-    "/tldraw": {
-      "filePath": "tldraw.tsx"
-    },
     "/about": {
       "filePath": "about.lazy.tsx"
-    },
-    "/p/$patternId": {
-      "filePath": "p/$patternId.tsx"
     }
   }
 }
