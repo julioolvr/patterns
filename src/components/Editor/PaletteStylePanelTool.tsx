@@ -7,6 +7,7 @@ import NewColorButton from "./PaletteStylePanelTool/NewColorButton";
 import { createPortal } from "react-dom";
 import ColorSelector from "./ColorSelector";
 import { produce } from "immer";
+import useSequence from "../../hooks/useSequence";
 
 export default function PaletteStylePanelTool() {
   const editor = useEditor();
@@ -21,7 +22,7 @@ export default function PaletteStylePanelTool() {
   // Not sure why updating the selected shape does not trigger a rerender
   // of this component and I don't have internet to investigate further -
   // this does the trick.
-  const [, setForceRefreshCounter] = useState(0);
+  const [, tickForceRefreshSequence] = useSequence(0);
 
   useEffect(() => {
     if (
@@ -59,7 +60,7 @@ export default function PaletteStylePanelTool() {
               type: "pattern",
               props: { selectedColor: i },
             });
-            setForceRefreshCounter((n) => n + 1);
+            tickForceRefreshSequence();
           }}
           onDoubleClick={() => setEditingColorIndex(i)}
         >
@@ -99,7 +100,7 @@ export default function PaletteStylePanelTool() {
               palette: [...selectedShape.props.palette, newColor],
             },
           });
-          setForceRefreshCounter((n) => n + 1);
+          tickForceRefreshSequence();
         }}
       />
     </div>
