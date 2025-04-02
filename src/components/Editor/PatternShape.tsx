@@ -46,10 +46,7 @@ export class PatternShapeUtil extends BaseBoxShapeUtil<PatternShape> {
       columns: 20,
       shifted: false,
       colors: times(40, () => times(20, () => 0)),
-      palette: {
-        colors: ["#e2e2e2", "red", "blue", "green"],
-        selected: 0,
-      },
+      palette: paletteStyle.defaultValue,
       isShifted: true,
       h: 720,
       w: 240,
