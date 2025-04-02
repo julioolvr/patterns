@@ -27,12 +27,100 @@ const PatternContextToolbar = track(() => {
 
   return (
     <>
-      {/* Shift / download */}
+      {/* Add / remove rows */}
       <div
         style={{
           position: "absolute",
           pointerEvents: "all",
           top: pageCoordinates.y - 42,
+          left: pageCoordinates.x,
+          width: selectionRotatedPageBounds.width * editor.getZoomLevel(),
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+        onPointerDown={(e) => e.stopPropagation()}
+      >
+        <div
+          style={{
+            borderRadius: 8,
+            display: "flex",
+            boxShadow: "0 0 0 1px rgba(0,0,0,0.1), 0 4px 8px rgba(0,0,0,0.1)",
+            background: "var(--color-panel)",
+            width: "fit-content",
+            alignItems: "center",
+          }}
+        >
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              height: 32,
+              width: 32,
+              cursor: "pointer",
+            }}
+            onClick={() => {
+              editor.markHistoryStoppingPoint();
+
+              if (selectedShape.props.rows > 1) {
+                editor.updateShape<PatternShape>({
+                  id: selectedShape.id,
+                  type: "pattern",
+                  props: {
+                    colors: selectedShape.props.colors.slice(0, -1),
+                    rows: selectedShape.props.rows - 1,
+                    h:
+                      (selectedShape.props.h / selectedShape.props.rows) *
+                      (selectedShape.props.rows - 1),
+                  },
+                });
+              } else {
+                editor.deleteShape(selectedShape.id);
+              }
+            }}
+          >
+            <TldrawUiIcon icon="minus" />
+          </div>
+
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              height: 32,
+              width: 32,
+              cursor: "pointer",
+            }}
+            onClick={() => {
+              editor.markHistoryStoppingPoint();
+              editor.updateShape<PatternShape>({
+                id: selectedShape.id,
+                type: "pattern",
+                props: {
+                  colors: [
+                    ...selectedShape.props.colors,
+                    times(selectedShape.props.columns, () => 0),
+                  ],
+                  rows: selectedShape.props.rows + 1,
+                  h:
+                    (selectedShape.props.h / selectedShape.props.rows) *
+                    (selectedShape.props.rows + 1),
+                },
+              });
+            }}
+          >
+            <TldrawUiIcon icon="plus" />
+          </div>
+        </div>
+      </div>
+
+      {/* Shift / download */}
+      <div
+        style={{
+          position: "absolute",
+          pointerEvents: "all",
+          top: pageCoordinates.y + selectionRotatedPageBounds.height * editor.getZoomLevel() + 20,
           left: pageCoordinates.x,
           width: selectionRotatedPageBounds.width * editor.getZoomLevel(),
           display: "flex",
@@ -184,97 +272,6 @@ const PatternContextToolbar = track(() => {
             }}
           >
             <TldrawUiIcon icon="minus" />
-          </div>
-        </div>
-      </div>
-
-      {/* Add / remove rows */}
-      <div
-        style={{
-          position: "absolute",
-          pointerEvents: "all",
-          top:
-            pageCoordinates.y +
-            selectionRotatedPageBounds.height * editor.getZoomLevel() +
-            12,
-          left: pageCoordinates.x,
-          width: selectionRotatedPageBounds.width * editor.getZoomLevel(),
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-        }}
-        onPointerDown={(e) => e.stopPropagation()}
-      >
-        <div
-          style={{
-            borderRadius: 8,
-            display: "flex",
-            boxShadow: "0 0 0 1px rgba(0,0,0,0.1), 0 4px 8px rgba(0,0,0,0.1)",
-            background: "var(--color-panel)",
-            width: "fit-content",
-            alignItems: "center",
-          }}
-        >
-          <div
-            style={{
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              height: 32,
-              width: 32,
-              cursor: "pointer",
-            }}
-            onClick={() => {
-              editor.markHistoryStoppingPoint();
-
-              if (selectedShape.props.rows > 1) {
-                editor.updateShape<PatternShape>({
-                  id: selectedShape.id,
-                  type: "pattern",
-                  props: {
-                    colors: selectedShape.props.colors.slice(0, -1),
-                    rows: selectedShape.props.rows - 1,
-                    h:
-                      (selectedShape.props.h / selectedShape.props.rows) *
-                      (selectedShape.props.rows - 1),
-                  },
-                });
-              } else {
-                editor.deleteShape(selectedShape.id);
-              }
-            }}
-          >
-            <TldrawUiIcon icon="minus" />
-          </div>
-
-          <div
-            style={{
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              height: 32,
-              width: 32,
-              cursor: "pointer",
-            }}
-            onClick={() => {
-              editor.markHistoryStoppingPoint();
-              editor.updateShape<PatternShape>({
-                id: selectedShape.id,
-                type: "pattern",
-                props: {
-                  colors: [
-                    ...selectedShape.props.colors,
-                    times(selectedShape.props.columns, () => 0),
-                  ],
-                  rows: selectedShape.props.rows + 1,
-                  h:
-                    (selectedShape.props.h / selectedShape.props.rows) *
-                    (selectedShape.props.rows + 1),
-                },
-              });
-            }}
-          >
-            <TldrawUiIcon icon="plus" />
           </div>
         </div>
       </div>
