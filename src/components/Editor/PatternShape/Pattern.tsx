@@ -26,7 +26,7 @@ export default function Pattern({
               "pattern__row--shifted": isShifted,
             })}
           >
-            <div className="pattern__row-counter">{y + 1}</div>
+            <div className="pattern__row-counter">{rows - y}</div>
 
             {times(columns, (x) => {
               colorCount++;
