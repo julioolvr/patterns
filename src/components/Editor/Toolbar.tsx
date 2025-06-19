@@ -36,6 +36,7 @@ export default function Toolbar() {
       <SelectToolbarItem />
 
       <ToolbarItem tool="add-pattern" />
+      <ToolbarItem tool="bucket-fill" />
 
       <HandToolbarItem />
       <DrawToolbarItem />

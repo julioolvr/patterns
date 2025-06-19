@@ -2,6 +2,7 @@ import "tldraw/tldraw.css";
 
 import { Tldraw } from "tldraw";
 
+import { BucketTool } from "./Editor/BucketTool";
 import PatternContextToolbar from "./Editor/PatternContextToolbar";
 import { PatternShapeUtil } from "./Editor/PatternShape";
 import StylePanel from "./Editor/StylePanel";
@@ -13,6 +14,7 @@ export default function App() {
       <Tldraw
         persistenceKey="patterns"
         shapeUtils={[PatternShapeUtil]}
+        tools={[BucketTool]}
         components={{
           StylePanel,
           Toolbar,
@@ -26,6 +28,15 @@ export default function App() {
               label: "New pattern",
               onSelect: () => {
                 editor.createShapes([{ type: "pattern" }]);
+              },
+            };
+
+            tools["bucket-fill"] = {
+              id: "bucket-fill",
+              icon: "color-bucket",
+              label: "Bucket fill",
+              onSelect: () => {
+                editor.setCurrentTool("bucket-fill");
               },
             };
 

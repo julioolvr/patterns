@@ -2,6 +2,8 @@ import { produce } from "immer";
 import { times } from "remeda";
 import { BaseBoxShapeUtil, HTMLContainer, T, TLBaseShape } from "tldraw";
 
+import { floodFill } from "@/utils/floodFill";
+
 import { PaletteStyle, paletteStyle } from "./__shared__/PaletteStyle";
 import Pattern from "./PatternShape/Pattern";
 
@@ -59,9 +61,11 @@ export class PatternShapeUtil extends BaseBoxShapeUtil<PatternShape> {
 
   component(shape: PatternShape) {
     const isEditing = this.editor.getEditingShapeId() == shape.id;
+    const currentTool = this.editor.getCurrentToolId();
+    const isBucketTool = currentTool === "bucket-fill";
 
     return (
-      <HTMLContainer style={{ pointerEvents: isEditing ? "all" : "none" }}>
+      <HTMLContainer style={{ pointerEvents: isEditing || isBucketTool ? "all" : "none" }}>
         <Pattern
           rows={shape.props.rows}
           columns={shape.props.columns}
@@ -69,21 +73,42 @@ export class PatternShapeUtil extends BaseBoxShapeUtil<PatternShape> {
             row.map((cell) => shape.props.palette.colors[cell])
           )}
           isShifted={shape.props.isShifted}
+          isBucketToolActive={isBucketTool}
           onCellClicked={(x, y) => {
             this.editor.markHistoryStoppingPoint();
-            this.editor.updateShape<PatternShape>({
-              id: shape.id,
-              type: shape.type,
-              props: {
-                colors: produce(shape.props.colors, (colors) => {
-                  if (colors[y] === undefined) {
-                    colors[y] = [];
-                  }
+            
+            if (currentTool === "bucket-fill") {
+              // Use flood fill for bucket tool
+              const newColors = floodFill(
+                shape.props.colors,
+                x,
+                y,
+                shape.props.palette.selected
+              );
+              
+              this.editor.updateShape<PatternShape>({
+                id: shape.id,
+                type: shape.type,
+                props: {
+                  colors: newColors,
+                },
+              });
+            } else {
+              // Default single cell painting
+              this.editor.updateShape<PatternShape>({
+                id: shape.id,
+                type: shape.type,
+                props: {
+                  colors: produce(shape.props.colors, (colors) => {
+                    if (colors[y] === undefined) {
+                      colors[y] = [];
+                    }
 
-                  colors[y][x] = shape.props.palette.selected;
-                }),
-              },
-            });
+                    colors[y][x] = shape.props.palette.selected;
+                  }),
+                },
+              });
+            }
           }}
         />
       </HTMLContainer>
