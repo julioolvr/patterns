@@ -11,7 +11,6 @@ export default function Pattern({
   columns,
   colors,
   isShifted,
-  isBucketToolActive,
   onCellClicked,
 }: Props) {
   // TODO: Collapse borders
@@ -93,6 +92,5 @@ type Props = {
   columns: number;
   colors: string[][];
   isShifted: boolean;
-  isBucketToolActive: boolean;
   onCellClicked: (x: number, y: number) => void;
 };

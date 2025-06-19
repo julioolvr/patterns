@@ -1,9 +1,13 @@
 import { StateNode } from "tldraw";
 
+import { paletteStyle } from "./__shared__/PaletteStyle";
+
 export class BucketTool extends StateNode {
   static override id = "bucket-fill";
   static override initial = "idle";
   static override children = () => [BucketIdle];
+  
+  static override styles = [paletteStyle];
 }
 
 export class BucketIdle extends StateNode {

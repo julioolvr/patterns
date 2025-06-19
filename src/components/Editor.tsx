@@ -33,7 +33,7 @@ export default function App() {
 
             tools["bucket-fill"] = {
               id: "bucket-fill",
-              icon: "color-bucket",
+              icon: "fill-pattern",
               label: "Bucket fill",
               onSelect: () => {
                 editor.setCurrentTool("bucket-fill");

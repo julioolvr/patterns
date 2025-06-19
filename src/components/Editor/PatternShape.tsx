@@ -65,7 +65,9 @@ export class PatternShapeUtil extends BaseBoxShapeUtil<PatternShape> {
     const isBucketTool = currentTool === "bucket-fill";
 
     return (
-      <HTMLContainer style={{ pointerEvents: isEditing || isBucketTool ? "all" : "none" }}>
+      <HTMLContainer
+        style={{ pointerEvents: isEditing || isBucketTool ? "all" : "none" }}
+      >
         <Pattern
           rows={shape.props.rows}
           columns={shape.props.columns}
@@ -73,10 +75,9 @@ export class PatternShapeUtil extends BaseBoxShapeUtil<PatternShape> {
             row.map((cell) => shape.props.palette.colors[cell])
           )}
           isShifted={shape.props.isShifted}
-          isBucketToolActive={isBucketTool}
           onCellClicked={(x, y) => {
             this.editor.markHistoryStoppingPoint();
-            
+
             if (currentTool === "bucket-fill") {
               // Use flood fill for bucket tool
               const newColors = floodFill(
@@ -85,7 +86,7 @@ export class PatternShapeUtil extends BaseBoxShapeUtil<PatternShape> {
                 y,
                 shape.props.palette.selected
               );
-              
+
               this.editor.updateShape<PatternShape>({
                 id: shape.id,
                 type: shape.type,
